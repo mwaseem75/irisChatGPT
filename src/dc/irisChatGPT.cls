@@ -59,4 +59,45 @@ ClassMethod OpenAI(query) [ Language = python ]
 	return qa.run(query)
 }
 
+ClassMethod irisDB(query) [ Language = python ]
+{
+	from langchain.llms import OpenAI
+	from langchain import  SQLDatabase, SQLDatabaseChain
+	from langchain.prompts.prompt import PromptTemplate
+	import os,iris
+	
+	#Get Api key
+	apiKeyRef = iris.gref("^ChatGPTKey")
+	try:
+		apiKey = apiKeyRef.get([1])
+	except:
+		return "Please define ApiKey by calling SetApiKey(key) method"
+
+	os.environ['OPENAI_API_KEY'] = apiKey
+	
+	_DEFAULT_TEMPLATE = """Given an input question, first create a syntactically correct {dialect} query to run, then look at the results of the query and return the answer.
+
+	Use the following format:
+
+	Question: "Question here"
+	SQLQuery: "SQL Query to run"
+	SQLResult: "Result of the SQLQuery"
+	Answer: "Final answer here"
+
+	The SQL query should NOT end with semi-colon
+	Question: {input}"""
+
+	PROMPT = PromptTemplate(
+	    input_variables=["input", "dialect"], template=_DEFAULT_TEMPLATE
+	)
+
+	db = SQLDatabase.from_uri("iris://superuser:SYS@localhost:1972/USER") 
+
+	llm = OpenAI(temperature=0, verbose=True)
+
+	db_chain = SQLDatabaseChain(llm=llm, database=db, prompt=PROMPT, verbose=True) 
+
+	return db_chain.run(query)
+}
+
 }
