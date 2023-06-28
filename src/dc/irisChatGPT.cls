@@ -100,4 +100,62 @@ ClassMethod irisDB(query) [ Language = python ]
 	return db_chain.run(query)
 }
 
+ClassMethod irisDocs(query) [ Language = python ]
+{
+	from langchain.vectorstores import Chroma
+	from langchain.embeddings import OpenAIEmbeddings
+	from langchain.llms import OpenAI
+	from langchain.memory import ConversationBufferMemory
+	from langchain.chains import ConversationalRetrievalChain
+
+	import os,iris
+	#Get Api key
+	apiKeyRef = iris.gref("^ChatGPTKey")
+	try:
+		apiKey = apiKeyRef.get([1])
+	except:
+		return "Please define ApiKey by calling SetApiKey(key) method"
+
+	os.environ['OPENAI_API_KEY'] = apiKey
+	embedding = OpenAIEmbeddings()
+	persist_directory = 'vectors'
+	## Now we can load the persisted database from disk, and use it as normal. 
+	try:
+		vectordb = Chroma(persist_directory=persist_directory, embedding_function=embedding)
+		memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
+		qa = ConversationalRetrievalChain.from_llm(OpenAI(temperature=0), vectordb.as_retriever(), memory=memory)
+	except Exception as e:
+		return e
+	return qa.run(query)
+}
+
+ClassMethod irisContest(query) [ Language = python ]
+{
+	from langchain.vectorstores import Chroma
+	from langchain.embeddings import OpenAIEmbeddings
+	from langchain.llms import OpenAI
+	from langchain.memory import ConversationBufferMemory
+	from langchain.chains import ConversationalRetrievalChain
+
+	import os,iris
+	#Get Api key
+	apiKeyRef = iris.gref("^ChatGPTKey")
+	try:
+		apiKey = apiKeyRef.get([1])
+	except:
+		return "Please define ApiKey by calling SetApiKey(key) method"
+
+	os.environ['OPENAI_API_KEY'] = apiKey
+	embedding = OpenAIEmbeddings()
+	persist_directory = 'contest'
+	## Now we can load the persisted database from disk, and use it as normal. 
+	try:
+		vectordb = Chroma(persist_directory=persist_directory, embedding_function=embedding)
+		memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
+		qa = ConversationalRetrievalChain.from_llm(OpenAI(temperature=0), vectordb.as_retriever(), memory=memory)
+	except Exception as e:
+		return e
+	return qa.run(query)
+}
+
 }
