@@ -1,0 +1,8 @@
+langchain
+openai
+pypdf
+chromadb
+tiktoken 
+clickhouse-connect==0.5.22 
+sqlalchemy-iris
+

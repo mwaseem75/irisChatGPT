@@ -1,0 +1,8 @@
+<html>
+<head>
+    <title>Yearly Symbol Prices</title>
+</head>
+<frameset>
+    <frame src='https://extras.streamlit.app//?embedded=true'>
+</frameset>
+</html>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25">
+  <Document name="irisChatGPT.ZPM">
+    <Module>
+      <Name>irisChatGPT</Name>
+      <Version>1.0.1</Version>
+      <Description>IRIS Chat GPT multi functional application</Description>
+      <Packaging>module</Packaging>
+      <SourcesRoot>src</SourcesRoot>
+      <Resource Name="dc.PKG"/>
+      <FileCopy Name="python/" Target="${mgrdir}python/"/>   
+  
+      <CSPApplication
+        Url="/csp/irisChatGPT"
+        Path="/src/csp"
+        Directory="{$cspdir}/irisChatGPT"
+        ServeFiles="1"
+        Recurse="1"
+        CookiePath="/csp/irisChatGPT/" 
+        UseCookies="2"
+        MatchRoles=":{$dbrole}" 
+        PasswordAuthEnabled="1"
+        UnauthenticatedEnabled="0"
+       />
+    </Module>
+  </Document>
+</Export>

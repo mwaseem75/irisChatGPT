@@ -1,0 +1,23 @@
+
+{
+  "files.associations": {
+  
+      "Dockerfile*": "dockerfile",
+      "iris.script": "objectscript"
+    },
+  "objectscript.conn" :{
+    "ns": "%SYS",
+    "username": "SuperUser",
+    "password": "SYS",
+    "docker-compose": {
+      "service": "iris",
+      "internalPort": 52773
+    },
+    "links": {
+      "FhirClient App": "http://localhost:55037/csp/irisChatGPT/index.csp"
+    },
+    "active": true,
+    "server": "default~iris"
+  }
+
+}
