@@ -107,6 +107,7 @@ ClassMethod irisDocs(query) [ Language = python ]
 	from langchain.llms import OpenAI
 	from langchain.memory import ConversationBufferMemory
 	from langchain.chains import ConversationalRetrievalChain
+	import iris
 
 	import os,iris
 	#Get Api key
@@ -118,7 +119,7 @@ ClassMethod irisDocs(query) [ Language = python ]
 
 	os.environ['OPENAI_API_KEY'] = apiKey
 	embedding = OpenAIEmbeddings()
-	persist_directory = 'vectors'
+	persist_directory = iris.cls("%SYSTEM.Util").ManagerDirectory()+'python/vectordb/vectors'
 	## Now we can load the persisted database from disk, and use it as normal. 
 	try:
 		vectordb = Chroma(persist_directory=persist_directory, embedding_function=embedding)
@@ -147,7 +148,8 @@ ClassMethod irisContest(query) [ Language = python ]
 
 	os.environ['OPENAI_API_KEY'] = apiKey
 	embedding = OpenAIEmbeddings()
-	persist_directory = 'contest'
+	persist_directory = iris.cls("%SYSTEM.Util").ManagerDirectory()+'python/vectordb/contest'
+	
 	## Now we can load the persisted database from disk, and use it as normal. 
 	try:
 		vectordb = Chroma(persist_directory=persist_directory, embedding_function=embedding)
@@ -156,6 +158,13 @@ ClassMethod irisContest(query) [ Language = python ]
 	except Exception as e:
 		return e
 	return qa.run(query)
+}
+
+ClassMethod test() [ Language = python ]
+{
+	import iris
+	W = iris.cls("%SYSTEM.Util").ManagerDirectory()+'python/vectordb/contest'
+	print(W)
 }
 
 }
