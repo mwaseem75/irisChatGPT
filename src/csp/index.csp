@@ -1,8 +1,8 @@
 <html>
 <head>
-    <title>Yearly Symbol Prices</title>
+    <title>irisChatGPT Demo</title>
 </head>
 <frameset>
-    <frame src='https://extras.streamlit.app//?embedded=true'>
+    <frame src='http://localhost:8501'>
 </frameset>
 </html>

@@ -1,0 +1,8 @@
+streamlit
+pypdf
+langchain
+chromadb
+openai
+tiktoken
+faiss-cpu
+sqlalchemy-iris
