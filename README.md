@@ -1,4 +1,6 @@
-⚡ irisChatGPT application leverages the functionality of one of the hottest python framework langchain with the help of intersystems Embedded Python functionality. ⚡
+**irisChatGPT** application leverages the functionality of one of the hottest python framework [LangChain](https://python.langchain.com/docs/get_started/introduction.html) built around Large Language Models (LLMs).
+LangChain is a framework that enables quick and easy development of applications that make use of Large Language Models.
+Application is built by using objectscript with the help of  [intersystems Embedded Python](https://docs.intersystems.com/irisforhealthlatest/csp/docbook/DocBook.UI.Page.cls?KEY=AFL_epython) functionality. It also contains [Streamlit](https://streamlit.io/) web application which is an open-source Python app framework to create beautiful web apps for data science and machine learning.
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/e84ecde9-24a6-475e-b598-6a7f3abe1410)
 
 
