@@ -1,101 +1,239 @@
 **irisChatGPT** application leverages the functionality of one of the hottest python framework [LangChain](https://python.langchain.com/docs/get_started/introduction.html) built around Large Language Models (LLMs).
 LangChain is a framework that enables quick and easy development of applications that make use of Large Language Models.
 Application is built by using objectscript with the help of  [intersystems Embedded Python](https://docs.intersystems.com/irisforhealthlatest/csp/docbook/DocBook.UI.Page.cls?KEY=AFL_epython) functionality. It also contains [Streamlit](https://streamlit.io/) web application which is an open-source Python app framework to create beautiful web apps for data science and machine learning.
+
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/e84ecde9-24a6-475e-b598-6a7f3abe1410)
 
 
-#
+## Streamlit Web Application Layout
+![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/acfb914e-560f-4554-babb-1a65b1531a57)
 
-LangChain is a framework built around Large Language Models (LLMs). LangChain Documentatio.
-LangChain is a framework for developing applications powered by language models. We believe that the most powerful and differentiated applications will not only call out to a language model via an api, but will also:
-LangChain is a framework that enables quick and easy development of applications that make use of Large Language Models
+## Features
+* Built-in [Intersystems ObjectScript Reference](https://docs.intersystems.com/iris20231/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS) ChatGPT
+* Built-in [InterSystems Grand Prix Contest 2023](https://community.intersystems.com/post/intersystems-grand-prix-contest-2023) ChatGPT
+* Answer questions over a Cache database by using SQLDatabaseChain
+* Create your own chatGPT model by using PDF, work and text documents
+* OpenAI ChatGPT
+* Wikipedia Search
+* Search on the internet by using DuckDuckGo (DDG) general search engine
+* Generate Python code by using Python REPL LangChain functionality
+* Streamlit Web application
+  * Intersystems objectscript reference ChatGPT
+  * Intersystems grand prix contest ChatGPT
+  * Select and upload your own document for ChatGPT 
+  * OpenAI ChatGPT
 
-[![Release Notes](https://img.shields.io/github/release/hwchase17/langchain)](https://github.com/hwchase17/langchain/releases)
-[![lint](https://github.com/hwchase17/langchain/actions/workflows/lint.yml/badge.svg)](https://github.com/hwchase17/langchain/actions/workflows/lint.yml)
-[![test](https://github.com/hwchase17/langchain/actions/workflows/test.yml/badge.svg)](https://github.com/hwchase17/langchain/actions/workflows/test.yml)
-[![Downloads](https://static.pepy.tech/badge/langchain/month)](https://pepy.tech/project/langchain)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Twitter](https://img.shields.io/twitter/url/https/twitter.com/langchainai.svg?style=social&label=Follow%20%40LangChainAI)](https://twitter.com/langchainai)
-[![](https://dcbadge.vercel.app/api/server/6adMQxSpJS?compact=true&style=flat)](https://discord.gg/6adMQxSpJS)
-[![Open in Dev Containers](https://img.shields.io/static/v1?label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/hwchase17/langchain)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/hwchase17/langchain)
-[![GitHub star chart](https://img.shields.io/github/stars/hwchase17/langchain?style=social)](https://star-history.com/#hwchase17/langchain)
-[![Dependency Status](https://img.shields.io/librariesio/github/hwchase17/langchain)](https://libraries.io/github/hwchase17/langchain)
-[![Open Issues](https://img.shields.io/github/issues-raw/hwchase17/langchain)](https://github.com/hwchase17/langchain/issues)
+## How to Run
 
-#
+To start coding with this repo, you do the following:
 
-## irisChatGPT Features
-* Personal ChatGPT with PDF, Word and Text documents
-* Built in ChatGPT with Intersystems objectscript reference 
-* Built in ChatGPT with Intersystems latest contest
-* database chaining
-* OpenAI
-* Streamlit web application 
+1. Clone/git pull the repo into any local directory
 
-## 🤔 What is this?
+```shell
+git clone https://github.com/mwaseem75/irisChatGPT.git
+```
 
-Large language models (LLMs) are emerging as a transformative technology, enabling developers to build applications that they previously could not. However, using these LLMs in isolation is often insufficient for creating a truly powerful app - the real power comes when you can combine them with other sources of computation or knowledge.
+2. Open the terminal in this directory and run:
 
-This library aims to assist in the development of those types of applications. Common examples of these applications include:
+```shell
+docker-compose build
+```
 
-**❓ Question Answering over specific documents**
+3. Run the IRIS container with your project:
 
-- [Documentation](https://python.langchain.com/docs/use_cases/question_answering/)
-- End-to-end Example: [Question Answering over Notion Database](https://github.com/hwchase17/notion-qa)
+```shell
+docker-compose up -d
+```
 
-**💬 Chatbots**
+## Installation with ZPM
+```
+zpm "install irisChatGPT.ZPM"
+```
+## Getting Started 
+## Registered FHIR Servers
+###### Connect to IRIS Terminal
+```
+docker-compose exec iris iris session iris
+```
+###### To list down registered server use ServerList() of dc.FhirClient class
+```
+do ##class(dc.FhirClient).ServerList()
+```
+![image](https://user-images.githubusercontent.com/18219467/170888825-7d655866-3a8b-4322-9b64-1ccf0b1ffbf4.png)
 
-- [Documentation](https://python.langchain.com/docs/use_cases/chatbots/)
-- End-to-end Example: [Chat-LangChain](https://github.com/hwchase17/chat-langchain)
+###### To Register New Server use RegisterServer() function of dc.FhirClient class
+###### class(dc.FhirClient).RegsterServer("Server Name","Endpoint","ApiKey"[optional],"EndpointOAuth"[optional]
+To Register New Server use RegisterServer class method
+```
+do ##class(dc.FhirClient).RegisterServer("INTERSYSTEMS FHIR Server","http://localhost:52773/csp/healthshare/samples/fhir/r4/"," "," ")
+```
+![image](https://user-images.githubusercontent.com/18219467/171025900-e973c396-52da-4e24-8083-c7f5f701919c.png)
 
-**🤖 Agents**
 
-- [Documentation](https://python.langchain.com/docs/modules/agents/)
-- End-to-end Example: [GPT+WolframAlpha](https://huggingface.co/spaces/JavaFXpert/Chat-GPT-LangChain)
+###### To Activate server, call below method by passing server ID
+```
+do ##class(dc.FhirClient).SetFhirServer(2)
+```
+## Get Resources from the FHIR Servers
+###### To Retrieve all the resouces for the current server use ListResources() method of dc.FhirClient class
+```
+do ##class(dc.FhirClient).ListResources()
+```
+![image](https://user-images.githubusercontent.com/18219467/170890855-891bf5eb-a724-4297-8bcb-821637a146f5.png)
 
-## 📖 Documentation
+###### In order to display number of recordes of any resources use CountResource() method by passing Resource of dc.FhirClient
+###### Below command will get counter of Patient Resource against active FHIR Server
+```
+set count = ##class(dc.FhirClient).CountResource("Patient")
+write count
+```
 
-Please see [here](https://python.langchain.com) for full documentation on:
 
-- Getting started (installation, setting up the environment, simple examples)
-- How-To examples (demos, integrations, helper functions)
-- Reference (full API docs)
-- Resources (high-level explanation of core concepts)
+###### To Retrieve all the created Resources along with their count just pass 1 to ListResource() function
+```
+do ##class(dc.FhirClient).ListResources(1)
+```
+![image](https://user-images.githubusercontent.com/18219467/170890718-1dacba2c-4d2d-4830-8606-be0542230afb.png)
 
-## 🚀 What can this help with?
 
-There are six main areas that LangChain is designed to help with.
-These are, in increasing order of complexity:
+## Get Resources information by providing resource from active server 
+###### To get details of the resource use GetResource() by passing Resource of dc.FhirClient class
+###### Currently list of following resources is available
+* Patient
+* Observation
+* Procedure
+* Immunization
+* Encounter
+* Organization
+* Condition
+* Practitioner
 
-**📃 LLMs and Prompts:**
+###### Below command will retrieve all the Patients from the active FHIR Server
+```
+do ##class(dc.FhirClient).GetResource("Patient")
+```
+![image](https://user-images.githubusercontent.com/18219467/170890728-7fb7d8a3-4c33-4084-8f54-6ca772b60a41.png)
+###### Below command will retrieve all the Observations from the active FHIR Server
+```
+do ##class(dc.FhirClient).GetResource("Observation")
+```
+![image](https://user-images.githubusercontent.com/18219467/170890999-9548988e-40e7-49c1-ad7f-f95d45f62b50.png)
 
-This includes prompt management, prompt optimization, a generic interface for all LLMs, and common utilities for working with LLMs.
+## Get Resources for particular patient from the FHIR Servers
+###### Currently list of following resources against the patient is available
+* Observation
+* Procedure
+* Immunization
+* Encounter
+* Organization
+* Condition
+* Practitioner
+###### Below command will retrieve Observations detail against Patinet ID 1 from the active FHIR Server
+```
+do ##class(dc.FhirClient).GetPatientResources("Observation","1")
+```
+![image](https://user-images.githubusercontent.com/18219467/170956427-4b46797d-45ce-49af-996d-465a2239d73c.png)
 
-**🔗 Chains:**
+###### Below command will retrieve detail of Encounters against Patinet ID 1 from the active FHIR Server
+```
+do ##class(dc.FhirClient).GetPatientResources("Encounter","1")
+```
+![image](https://user-images.githubusercontent.com/18219467/170956695-ec3a396a-580c-41dc-b9f1-d5465a4a3653.png)
 
-Chains go beyond a single LLM call and involve sequences of calls (whether to an LLM or a different utility). LangChain provides a standard interface for chains, lots of integrations with other tools, and end-to-end chains for common applications.
+## Search in Patient Resource
+Patient Resource search parameter detaisl can be found [**here**](https://www.hl7.org/fhir/patient.html#search)
+Below command will search agaisnt Patient Id 2395
+```
+do ##class(dc.FhirClient).GetResource("Patient","_id","2395")
+```
+![image](https://user-images.githubusercontent.com/18219467/171736498-64e21522-c270-44a4-9135-edb99062c8b6.png)
 
-**📚 Data Augmented Generation:**
+Below command will search Patient given Name and family Name contaning "Don"
+```
+do ##class(dc.FhirClient).GetResource("Patient","name","Don")
+```
+![image](https://user-images.githubusercontent.com/18219467/171736755-365dfcc5-8043-4a9f-9cb3-6d5e4fd1c04b.png)
 
-Data Augmented Generation involves specific types of chains that first interact with an external data source to fetch data for use in the generation step. Examples include summarization of long pieces of text and question/answering over specific data sources.
+Below command will search all the male patients
+```
+do ##class(dc.FhirClient).GetResource("Patient","gender","male")
+```
+![image](https://user-images.githubusercontent.com/18219467/171736915-63a21dd0-d448-426a-bf0f-4022e8c2d115.png)
 
-**🤖 Agents:**
 
-Agents involve an LLM making decisions about which Actions to take, taking that Action, seeing an Observation, and repeating that until done. LangChain provides a standard interface for agents, a selection of agents to choose from, and examples of end-to-end agents.
 
-**🧠 Memory:**
 
-Memory refers to persisting state between calls of a chain/agent. LangChain provides a standard interface for memory, a collection of memory implementations, and examples of chains/agents that use memory.
+## Create Patient Resource
+###### below CreatePatient() function of dc.FhirClient can be use to Create Patient Resource
+```
+ClassMethod CreatePatient(givenName As %String, familyName As %String, birthDate As %String,gender As %String)
+```
+###### function requires giveName,failyName,birthDate and gender to create Patient Resource
+###### below command will create Patient
+```
+do ##class(dc.FhirClient).CreatePatient("PatientGN","PatientFN","2000-06-01","male")
+```
+![image](https://user-images.githubusercontent.com/18219467/171737063-423401ef-0d59-4ce9-ac1d-af9f5c75c9b7.png)
 
-**🧐 Evaluation:**
+Let's search the newly created resource by it's name
+```
+do ##class(dc.FhirClient).CreatePatient("PatientGN","PatientFN","2000-06-01","male)
+```
+![image](https://user-images.githubusercontent.com/18219467/171737199-eeef2391-24df-4b1f-a22a-9f75f6cd32fa.png)
 
-[BETA] Generative models are notoriously hard to evaluate with traditional metrics. One new way of evaluating them is using language models themselves to do the evaluation. LangChain provides some prompts/chains for assisting in this.
+Patient ID 8111 is created
 
-For more information on these concepts, please see our [full documentation](https://python.langchain.com).
 
-## 💁 Contributing
+## Create Patient Observation Resource
+###### Let us create Observation against our newly created Patient Resource
+###### below CreateObservatoin() function of dc.FhirClient can be use to Create Patient Observatoins
+```
+ClassMethod CreateObservation(patientId As %String, loincCode As %String, ObrCategory As %String, ObrValue As %Integer, ObrUOM As %String, effectiveDate As %String)
+```
+###### Parametres 
+* patientId is the Id of Patient
+* LioncCode is Lionc Code, Detail can be found [**here**](https://loinc.org/fhir/)
+* ObrCategory is Observation Category, Detail can be found [**here**](https://www.hl7.org/fhir/valueset-observation-category.html)
+* ObrValue is Observatoin Value
+* ObrUOM is Observation Unit
+* EffectiveDate
 
-As an open-source project in a rapidly developing field, we are extremely open to contributions, whether it be in the form of a new feature, improved infrastructure, or better documentation.
+###### below command will create Patient Vital Sign Observation
+```
+do ##class(dc.FhirClient).CreateObservation("8111","8310-5","vital-signs",96.8,"degF","2022-01-22")
+```
+![image](https://user-images.githubusercontent.com/18219467/171738074-2a0dda54-6215-46b0-a3aa-6a2fcb27bb85.png)
 
-For detailed information on how to contribute, see [here](.github/CONTRIBUTING.md).
+
+Let's List down patient observations
+```
+do ##class(dc.FhirClient).GetPatientResources("Observation","8111")
+```
+![image](https://user-images.githubusercontent.com/18219467/172003634-3f8c9ef6-76c2-4af0-97ac-e4431750e2e1.png)
+
+
+Observation ID 8114 is created
+
+
+
+
+## View FHIR Server information from CSP Web application
+Navigate to [http://localhost:55037/csp/fhirclient/index.csp](http://localhost:55037/csp/fhirclient/index.csp)
+###### Index Page will show active server Patients,Observations,Practitioners and Encounters count along with Patient and Registered Servers details
+![170881284-b18aebca-e6a2-4a6e-ad20-a537c13ff51c](https://user-images.githubusercontent.com/18219467/170974585-621ce757-7382-4b0e-8505-40b141ada4c3.png)
+
+###### Index page will display FHIR Server List with active server selected. Select other server from the list to view details of selected server
+![image](https://user-images.githubusercontent.com/18219467/170976217-70b63f48-981a-4b76-9f9a-282f5f86ff59.png)
+
+###### Hover to Patient ID and select to get details of Patient Resources
+![image](https://user-images.githubusercontent.com/18219467/170976661-290c9f44-e11b-4fec-9cdb-bccb069de4ed.png)
+
+###### This page will display count of some of Patient Resources along with Patient Observations details
+![170881340-a9cd0c77-bf24-4e8e-85f7-84e04b527b49](https://user-images.githubusercontent.com/18219467/170976982-66eeb068-248f-474f-ad8c-e39c8cd2faea.png)
+
+
+## Other information
+Template used in web application is from [Bootstrap 4 Admin Dashboard](https://github.com/themekita/Atlantis-Lite) and it is free to use to develop non-commercial applications.
+
+
+## Thanks
