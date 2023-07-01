@@ -85,7 +85,7 @@ ClassMethod irisDB(query) [ Language = python ]
 	return db_chain.run(query)
 }
 
-// Create your own chatGPT document by saving vector data locally, 
+// Create your own chatGPT document by saving vector data locally
 
 ClassMethod ingest(filePath) [ Language = python ]
 {
