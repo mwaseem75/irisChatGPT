@@ -1,5 +1,3 @@
-![irisdataplatformmain](https://github.com/mwaseem75/irisChatGPT/assets/18219467/862fe939-869d-4eb4-93dc-f10d64323165)
-
 ⚡ irisChatGPT application leverages the functionality of one of the hottest python framework langchain with the help of intersystems Embedded Python functionality. ⚡
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/e84ecde9-24a6-475e-b598-6a7f3abe1410)
 
