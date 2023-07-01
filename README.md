@@ -61,13 +61,26 @@ Application requires OpenAI API Key, sign up for OpenAI API on [this page](https
 docker-compose exec iris iris session iris
 ```
 #### Create a new instance of dc.irisChatGPT class and use SetApiKey method to set OpenAI API Key 
+```
+set chat = ##class(dc.irisChatGPT).%New()
+do chat.SetAPIKey("Enter your Open API Key here")
+```
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/dd4303ca-6ff4-48a0-92c1-70a2ad18cdec)
 
 #### Chat with [Intersystems objectscript reference](https://docs.intersystems.com/iris20231/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS)
+write chat.irisDocs("Give me details of %$PIECE function with syntax")
+![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/e8c93b38-0eff-490c-95b1-4734c4ff3791)
+
 
 #### Chat with [InterSystems Grand Prix Contest 2023](https://community.intersystems.com/post/intersystems-grand-prix-contest-2023)
+![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/8bd171ca-e028-4481-8b30-4b5842a7ce97)
+
 #### Answer questions over a Cache database by using SQLDatabaseChain
+![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/e3b720c4-dcf1-4ce8-bb2b-da33cb7a1b87)
+
 #### Create your own chatGPT model by using PDF, work and text documents
+##### below code to ingest PDF
+
 #### OpenAI ChatGPT
 #### Wikipedia Search
 #### Search on the internet by using DuckDuckGo (DDG) general search engine
