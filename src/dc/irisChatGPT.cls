@@ -3,7 +3,7 @@ Class dc.irisChatGPT Extends %RegisteredObject
 
 // Set API key by using global variable
 
-ClassMethod SetApiKey(Key As %String) As %Integer
+ClassMethod SetAPIKey(Key As %String) As %Integer
 {
 	Set ^ChatGPTKey(1) = Key
 	Quit $$$OK

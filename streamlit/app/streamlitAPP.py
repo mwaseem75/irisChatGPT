@@ -162,10 +162,10 @@ def main():
     #init selection variable
     st.session_state['rb'] = rb
     if rb == 'Intersystems Objectscript Reference':
-        #st.header("🦜🔗Intersystems Objectscript Reference ChatGPT:")
+        st.header("🦜🔗Intersystems Objectscript Reference ChatGPT:")
         user_question = st.text_input("Ask a question about [Intersystems ObjectScript Reference](https://docs.intersystems.com/iris20231/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS) :")
     elif rb == 'InterSystems Grand Prix Contest':
-        #st.header("🦜🔗InterSystems Grand Prix Contest ChatGPT:")
+        st.header("🦜🔗InterSystems Grand Prix Contest 2023 ChatGPT:")
         user_question = st.text_input("Ask a question about [InterSystems Grand Prix Contest 2023](https://community.intersystems.com/post/intersystems-grand-prix-contest-2023) :")
     elif rb == 'Personal ChatGPT':
         st.header("🦜🔗Personal ChatGPT :books:")

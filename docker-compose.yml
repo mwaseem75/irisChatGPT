@@ -9,7 +9,7 @@ services:
     ports: 
       - 55036:1972
       - 55037:52773
-      - 53773
+      - 53773:53773
     volumes:
       - ./:/irisdev/app
 
