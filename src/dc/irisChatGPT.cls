@@ -238,4 +238,80 @@ ClassMethod personalGPT(query) [ Language = python ]
 	return qa.run(query)
 }
 
+ClassMethod wikiPedia(query) [ Language = python ]
+{
+	from langchain.utilities import WikipediaAPIWrapper
+	import os,iris
+	
+	#Get Api key
+	apiKeyRef = iris.gref("^ChatGPTKey")
+	try:
+		apiKey = apiKeyRef.get([1])
+	except:
+		return "Please define ApiKey by calling SetApiKey(key) method"
+
+	os.environ['OPENAI_API_KEY'] = apiKey
+		
+	try:
+		wikipedia = WikipediaAPIWrapper()
+		ret = wikipedia.run(query)
+	except Exception as e:
+		return e
+		
+	return ret
+}
+
+ClassMethod duckDuckGo(query) [ Language = python ]
+{
+	from langchain.tools import DuckDuckGoSearchRun
+	import os,iris
+	
+	#Get Api key
+	apiKeyRef = iris.gref("^ChatGPTKey")
+	try:
+		apiKey = apiKeyRef.get([1])
+	except:
+		return "Please define ApiKey by calling SetApiKey(key) method"
+
+	os.environ['OPENAI_API_KEY'] = apiKey
+		
+	try:
+		search = DuckDuckGoSearchRun()
+		ret = search.run(query)
+	except Exception as e:
+		return e
+		
+	return ret
+}
+
+ClassMethod pythonREPL(query) [ Language = python ]
+{
+	from langchain.agents.agent_toolkits import create_python_agent
+	from langchain.tools.python.tool import PythonREPLTool
+	from langchain.llms.openai import OpenAI
+	import os,iris
+	
+	#Get Api key
+	apiKeyRef = iris.gref("^ChatGPTKey")
+	try:
+		apiKey = apiKeyRef.get([1])
+	except:
+		return "Please define ApiKey by calling SetApiKey(key) method"
+
+	os.environ['OPENAI_API_KEY'] = apiKey
+	llm = OpenAI(temperature=0, max_tokens=1000)
+		
+	try:
+		agent_exec = create_python_agent(
+    	llm=llm,
+    	tool=PythonREPLTool(),
+    	verbose=True,
+		)
+		ret = agent_exec.run(query)
+	except Exception as e:
+		return e
+		
+	return ret
+}
+
 }
