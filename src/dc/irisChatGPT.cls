@@ -35,10 +35,11 @@ ClassMethod OpenAI(query) [ Language = python ]
 		llm = ChatOpenAI(temperature=0,openai_api_key=apiKey, model_name=MODEL, verbose=False) 
 		entity_memory = ConversationEntityMemory(llm=llm, k=K )
 		qa = ConversationChain(llm=llm,   prompt=ENTITY_MEMORY_CONVERSATION_TEMPLATE, memory=entity_memory)
+		ret = '\n'+qa.run(query)+'\n'
 	except Exception as e:  
 		return e
 
-	return qa.run(query)
+	return ret
 }
 
 // use of SQLDatabaseChain features
@@ -169,9 +170,10 @@ ClassMethod irisDocs(query) [ Language = python ]
 		vectordb = Chroma(persist_directory=persist_directory, embedding_function=embedding)
 		memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 		qa = ConversationalRetrievalChain.from_llm(OpenAI(temperature=0), vectordb.as_retriever(), memory=memory)
+		ret = '\n'+qa.run(query)+'\n'
 	except Exception as e:
 		return e
-	return qa.run(query)
+	return ret
 }
 
 // using intersystem contest vertor db document
@@ -201,9 +203,10 @@ ClassMethod irisContest(query) [ Language = python ]
 		vectordb = Chroma(persist_directory=persist_directory, embedding_function=embedding)
 		memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 		qa = ConversationalRetrievalChain.from_llm(OpenAI(temperature=0), vectordb.as_retriever(), memory=memory)
+		ret = '\n'+qa.run(query)+'\n'
 	except Exception as e:
 		return e
-	return qa.run(query)
+	return ret
 }
 
 // using intersystem contest vertor db document
@@ -233,9 +236,10 @@ ClassMethod personalGPT(query) [ Language = python ]
 		vectordb = Chroma(persist_directory=persist_directory, embedding_function=embedding)
 		memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 		qa = ConversationalRetrievalChain.from_llm(OpenAI(temperature=0), vectordb.as_retriever(), memory=memory)
+		ret = '\n'+qa.run(query)+'\n'
 	except Exception as e:
 		return e
-	return qa.run(query)
+	return ret
 }
 
 ClassMethod wikiPedia(query) [ Language = python ]
@@ -254,7 +258,7 @@ ClassMethod wikiPedia(query) [ Language = python ]
 		
 	try:
 		wikipedia = WikipediaAPIWrapper()
-		ret = wikipedia.run(query)
+		ret = '\n'+wikipedia.run(query)+'\n'
 	except Exception as e:
 		return e
 		
@@ -277,7 +281,7 @@ ClassMethod duckDuckGo(query) [ Language = python ]
 		
 	try:
 		search = DuckDuckGoSearchRun()
-		ret = search.run(query)
+		ret = '\n'+search.run(query)+'\n'
 	except Exception as e:
 		return e
 		
