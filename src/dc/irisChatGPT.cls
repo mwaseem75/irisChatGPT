@@ -11,7 +11,7 @@ ClassMethod SetApiKey(Key As %String) As %Integer
 
 // usage of OpenAI by using chatGPT model gpt-3-turbo-0613
 
-ClassMethod OpenAI(query) [ Language = python ]
+ClassMethod openAI(query) [ Language = python ]
 {
 	from langchain.chat_models import ChatOpenAI
 	from langchain.chains.conversation.memory import ConversationEntityMemory
@@ -42,7 +42,7 @@ ClassMethod OpenAI(query) [ Language = python ]
 	return ret
 }
 
-// use of SQLDatabaseChain features
+// Answer questions over a Cache database by using SQLDatabaseChain
 
 ClassMethod irisDB(query) [ Language = python ]
 {
@@ -85,7 +85,7 @@ ClassMethod irisDB(query) [ Language = python ]
 	return db_chain.run(query)
 }
 
-// Function used to save vector data 
+// Create your own chatGPT document by saving vector data locally, 
 
 ClassMethod ingest(filePath) [ Language = python ]
 {
@@ -143,7 +143,7 @@ ClassMethod ingest(filePath) [ Language = python ]
 	return "File uploaded successfully"
 }
 
-// using intersystem object reference vertor db document
+// Intersystem Objectscript Reference chatGPT
 
 ClassMethod irisDocs(query) [ Language = python ]
 {
@@ -176,7 +176,7 @@ ClassMethod irisDocs(query) [ Language = python ]
 	return ret
 }
 
-// using intersystem contest vertor db document
+// InterSystems Grand Prix Contest 2023 chatGPT
 
 ClassMethod irisContest(query) [ Language = python ]
 {
@@ -209,7 +209,7 @@ ClassMethod irisContest(query) [ Language = python ]
 	return ret
 }
 
-// using intersystem contest vertor db document
+// answer question about Personal chatGPT
 
 ClassMethod personalGPT(query) [ Language = python ]
 {
@@ -242,6 +242,8 @@ ClassMethod personalGPT(query) [ Language = python ]
 	return ret
 }
 
+// wikiPedia search
+
 ClassMethod wikiPedia(query) [ Language = python ]
 {
 	from langchain.utilities import WikipediaAPIWrapper
@@ -265,6 +267,8 @@ ClassMethod wikiPedia(query) [ Language = python ]
 	return ret
 }
 
+// search on internet by using DuckDuckGo (DDG) general search engine
+
 ClassMethod duckDuckGo(query) [ Language = python ]
 {
 	from langchain.tools import DuckDuckGoSearchRun
@@ -287,6 +291,8 @@ ClassMethod duckDuckGo(query) [ Language = python ]
 		
 	return ret
 }
+
+// REPL stands for Read Evaluate Print Loop,  Python REPL LangChain used to generate python code
 
 ClassMethod pythonREPL(query) [ Language = python ]
 {
