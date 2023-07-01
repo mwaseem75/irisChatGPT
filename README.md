@@ -69,22 +69,53 @@ do chat.SetAPIKey("Enter your Open API Key here")
 
 #### Chat with [Intersystems objectscript reference](https://docs.intersystems.com/iris20231/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS)
 write chat.irisDocs("Give me details of %$PIECE function with syntax")
-![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/e8c93b38-0eff-490c-95b1-4734c4ff3791)
-
+![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/ba064270-ed6e-4c8d-b8a3-5f38fcec3007)
 
 #### Chat with [InterSystems Grand Prix Contest 2023](https://community.intersystems.com/post/intersystems-grand-prix-contest-2023)
-![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/8bd171ca-e028-4481-8b30-4b5842a7ce97)
+![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/ae4b7f93-eac6-4af9-8494-5b7653c19bd8)
 
 #### Answer questions over a Cache database by using SQLDatabaseChain
-![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/e3b720c4-dcf1-4ce8-bb2b-da33cb7a1b87)
+![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/adba2e12-3066-4c00-a595-0c22dcb95100)
+
 
 #### Create your own chatGPT model by using PDF, work and text documents
-##### below code to ingest PDF
+##### Use ingest function to upload the document
+Copy your document to mgr folder, 
+reposotry already contain which we will load [Defining and Using Classes](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ)GOBJ from the repository. Details
+
+```
+set doc = ##class(dc.irisChatGPT).ingest("GOBJ.pdf")
+```
+##### Now run in 
+```
+w chat.personalGPT("Give me details of objects and properties") 
+```
+![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/de44febe-c028-4b57-aa47-25bcd643f9d0)
 
 #### OpenAI ChatGPT
+```
+w chat.openAI("Give me details of Intersystems")
+```
+![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/68574d29-8a8b-4c54-b3e1-569240e117af)
+
 #### Wikipedia Search
+```
+w chat.wikiPedia("LangChain")   
+```
+![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/d272bc12-12a8-4062-a73a-bcdb75d46f8d)
+
 #### Search on the internet by using DuckDuckGo (DDG) general search engine
+```
+w chat.duckDuckGo("What is the Capital of USA")
+```
+![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/64c1c1ff-95af-44e3-9a18-5d77dcbc5fa8)
+
 #### Generate Python code by using Python REPL LangChain functionality
+```
+w chat.pythonREPL("Write a function to check if 11 a prime number and test it")
+```
+![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/f4f93837-7cf3-4410-8eb3-f974861e8925)
+
 
 ## Streamlit Web application
 Navigate to [Streamlit Web Application](http://localhost:8501) or [CSP Web application](http://localhost:55037/csp/irisChatGPT/index.csp)
