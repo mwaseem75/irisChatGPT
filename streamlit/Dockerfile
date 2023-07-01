@@ -23,3 +23,4 @@ RUN pip3 install -r ${SRC_PATH}/streamlit/app/requirements.txt
 #EXPOSE 8501
 
 CMD streamlit run /opt/irisappS/streamlit/app/streamlitAPP.py
+#ENTRYPOINT ["streamlit", "run", "/opt/irisappS/streamlit/app/streamlitAPP.py", "--server.port=8501", "--server.address=0.0.0.0"]

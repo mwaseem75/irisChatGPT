@@ -9,6 +9,7 @@
       <SourcesRoot>src</SourcesRoot>
       <Resource Name="dc.PKG"/>
       <FileCopy Name="python/" Target="${mgrdir}python/"/>   
+      <FileCopy Name="pdfdata/" Target="${mgrdir}pdfdata/"/>   
        
       <CSPApplication
         Url="/csp/irisChatGPT"

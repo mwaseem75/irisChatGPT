@@ -1,7 +1,7 @@
 Class dc.irisChatGPT Extends %RegisteredObject
 {
 
-// Create records in FHIRServer and initate Global Variable to hold current server ID 
+// Set API key by using global variable
 
 ClassMethod SetApiKey(Key As %String) As %Integer
 {
@@ -9,25 +9,7 @@ ClassMethod SetApiKey(Key As %String) As %Integer
 	Quit $$$OK
 }
 
-// Count Resource, Pass "ALL" in case of counting all the resources
-
-ClassMethod IrisOpenAI(query As %String) As %String
-{
-	
-    
-	  try {
-  		  //Importing python file 
-          Set irisChatGPT = ##class(%SYS.Python).Import("irisChatGPT")
-          
-		} 
-	  Catch err {
-			return "Error While importing irisChatGPT file" 	
-			  	
-				}  
-	  //invoking Method from python file
-	  Set ans = irisChatGPT.irisOpneAI(query,$DATA(^$GLOBAL("^ActiveFhirServer")))
-	  return ans
-}
+// usage of OpenAI by using chatGPT model gpt-3-turbo-0613
 
 ClassMethod OpenAI(query) [ Language = python ]
 {
@@ -58,6 +40,8 @@ ClassMethod OpenAI(query) [ Language = python ]
 
 	return qa.run(query)
 }
+
+// use of SQLDatabaseChain features
 
 ClassMethod irisDB(query) [ Language = python ]
 {
@@ -100,6 +84,66 @@ ClassMethod irisDB(query) [ Language = python ]
 	return db_chain.run(query)
 }
 
+// Function used to save vector data 
+
+ClassMethod ingest(filePath) [ Language = python ]
+{
+	from langchain.vectorstores import Chroma
+	from langchain.embeddings import OpenAIEmbeddings
+	from langchain.text_splitter import RecursiveCharacterTextSplitter
+	from langchain.document_loaders import PyPDFLoader,UnstructuredWordDocumentLoader,TextLoader
+	
+	import os,iris
+	#Get Api key
+	apiKeyRef = iris.gref("^ChatGPTKey")
+	try:
+		apiKey = apiKeyRef.get([1])
+	except:
+		return "Please define ApiKey by calling SetApiKey(key) method"
+	
+	os.environ['OPENAI_API_KEY'] = apiKey
+	embedding = OpenAIEmbeddings()
+	#add mgr directory path to the file
+	filePath = iris.cls("%SYSTEM.Util").ManagerDirectory()+'pdfdata/'+filePath
+	filename, file_extension = os.path.splitext(filePath)
+	if file_extension == '.pdf':
+		fileType = "PDF"
+	elif file_extension == '.docx' or file_extension=='.doc':
+		fileType = "DOC"
+	elif file_extension == '.txt':
+		fileType = "TXT"
+	else:
+		fileType = "UNKOWN"
+
+	if fileType == "UNKOWN":
+		return "Please provide PDF,DOC or TXT file to ingest"
+	elif fileType == "PDF":
+		loader = PyPDFLoader(filePath)       
+	elif fileType == "DOC":
+		## Load and process the text
+		loader = UnstructuredWordDocumentLoader(filePath)
+	elif fileType == "TXT":
+		loader = TextLoader(filePath)    
+	
+	try:
+		documents = loader.load()
+		text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
+		texts = text_splitter.split_documents(documents)
+		# Embed and store the texts
+		# Supplying a persist_directory will store the embeddings on disk
+		persist_directory = iris.cls("%SYSTEM.Util").ManagerDirectory()+'python/vectordb/personal'
+		vectordb = Chroma.from_documents(documents=texts, embedding=embedding, persist_directory=persist_directory)
+		#save document locally
+		vectordb.persist()
+		vectordb = None
+	except Exception as e:
+		return e
+
+	return "File uploaded successfully"
+}
+
+// using intersystem object reference vertor db document
+
 ClassMethod irisDocs(query) [ Language = python ]
 {
 	from langchain.vectorstores import Chroma
@@ -129,6 +173,8 @@ ClassMethod irisDocs(query) [ Language = python ]
 		return e
 	return qa.run(query)
 }
+
+// using intersystem contest vertor db document
 
 ClassMethod irisContest(query) [ Language = python ]
 {
@@ -160,11 +206,36 @@ ClassMethod irisContest(query) [ Language = python ]
 	return qa.run(query)
 }
 
-ClassMethod test() [ Language = python ]
+// using intersystem contest vertor db document
+
+ClassMethod personalGPT(query) [ Language = python ]
 {
-	import iris
-	W = iris.cls("%SYSTEM.Util").ManagerDirectory()+'python/vectordb/contest'
-	print(W)
+	from langchain.vectorstores import Chroma
+	from langchain.embeddings import OpenAIEmbeddings
+	from langchain.llms import OpenAI
+	from langchain.memory import ConversationBufferMemory
+	from langchain.chains import ConversationalRetrievalChain
+
+	import os,iris
+	#Get Api key
+	apiKeyRef = iris.gref("^ChatGPTKey")
+	try:
+		apiKey = apiKeyRef.get([1])
+	except:
+		return "Please define ApiKey by calling SetApiKey(key) method"
+
+	os.environ['OPENAI_API_KEY'] = apiKey
+	embedding = OpenAIEmbeddings()
+	persist_directory = iris.cls("%SYSTEM.Util").ManagerDirectory()+'python/vectordb/personal'
+	
+	## Now we can load the persisted database from disk, and use it as normal. 
+	try:
+		vectordb = Chroma(persist_directory=persist_directory, embedding_function=embedding)
+		memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
+		qa = ConversationalRetrievalChain.from_llm(OpenAI(temperature=0), vectordb.as_retriever(), memory=memory)
+	except Exception as e:
+		return e
+	return qa.run(query)
 }
 
 }

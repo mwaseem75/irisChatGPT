@@ -4,10 +4,10 @@ css = '''
     padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem; display: flex
 }
 .chat-message.user {
-    background-color: #2b313e
+    background-color: #d7d7e3
 }
 .chat-message.bot {
-    background-color: #475063
+    background-color: #f0f2f6
 }
 .chat-message .avatar {
   width: 25px;
@@ -21,7 +21,6 @@ css = '''
 .chat-message .message {
   width: 95%;
   padding: 0 1.5rem;
-  color: #fff;
 }
 '''
 
@@ -37,7 +36,7 @@ bot_template = '''
 user_template = '''
 <div class="chat-message user">
     <div class="avatar">
-        <img src="https://i.ibb.co/rdZC7LZ/Photo-logo-1.png">
+        <img src="https://icons.iconarchive.com/icons/gartoon-team/gartoon-misc/256/Dialog-Question-Mark-icon.png">
     </div>    
     <div class="message">{{MSG}}</div>
 </div>

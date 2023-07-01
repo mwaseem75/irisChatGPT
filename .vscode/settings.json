@@ -14,7 +14,8 @@
       "internalPort": 52773
     },
     "links": {
-      "FhirClient App": "http://localhost:55037/csp/irisChatGPT/index.csp"
+      "irisChatGPT": "http://localhost:55037/csp/irisChatGPT/index.csp",
+      "Streamlit Application": "http://localhost:8501"
     },
     "active": true,
     "server": "default~iris"
