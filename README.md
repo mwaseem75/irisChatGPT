@@ -68,7 +68,9 @@ do chat.SetAPIKey("Enter your Open API Key here")
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/dd4303ca-6ff4-48a0-92c1-70a2ad18cdec)
 
 #### Chat with [Intersystems objectscript reference](https://docs.intersystems.com/iris20231/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS)
+```
 write chat.irisDocs("Give me details of %$PIECE function with syntax")
+```
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/ba064270-ed6e-4c8d-b8a3-5f38fcec3007)
 
 #### Chat with [InterSystems Grand Prix Contest 2023](https://community.intersystems.com/post/intersystems-grand-prix-contest-2023)
@@ -80,13 +82,12 @@ write chat.irisDocs("Give me details of %$PIECE function with syntax")
 
 #### Create your own chatGPT model by using PDF, work and text documents
 ##### Use ingest function to upload the document
-Copy your document to mgr folder, 
-reposotry already contain which we will load [Defining and Using Classes](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ)GOBJ from the repository. Details
-
+Copy your document to <ManagerDirectory> folder and then use the below command to ingest the data. 
+The repository already contains [Defining and Using Classes](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ) PDF which we will upload by using the below command
 ```
 set doc = ##class(dc.irisChatGPT).ingest("GOBJ.pdf")
 ```
-##### Now run in 
+##### Now we will use personalGPT function for our doucment
 ```
 w chat.personalGPT("Give me details of objects and properties") 
 ```
@@ -116,12 +117,10 @@ w chat.pythonREPL("Write a function to check if 11 a prime number and test it")
 ```
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/f4f93837-7cf3-4410-8eb3-f974861e8925)
 
-
+#
 ## Streamlit Web application
 Navigate to [Streamlit Web Application](http://localhost:8501) or [CSP Web application](http://localhost:55037/csp/irisChatGPT/index.csp)
-  #### Intersystems objectscript reference ChatGPT
-  #### Intersystems grand prix contest ChatGPT
-  #### Select and upload your own document for ChatGPT 
-  #### OpenAI ChatGPT
+![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/a3d3279a-d00a-431b-bab7-b9db5eec75cc)
+
 
 ## Thanks
