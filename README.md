@@ -63,6 +63,8 @@ docker-compose exec iris iris session iris
 #### Create a new instance of dc.irisChatGPT class and use SetApiKey method to set OpenAI API Key 
 ```
 set chat = ##class(dc.irisChatGPT).%New()
+```
+```
 do chat.SetAPIKey("Enter your Open API Key here")
 ```
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/dd4303ca-6ff4-48a0-92c1-70a2ad18cdec)
