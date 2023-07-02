@@ -83,7 +83,7 @@ write chat.irisContest("Give me Prizes and nominations")
 
 #### Answer questions over a Cache database by using SQLDatabaseChain
 ```
-write chat.irisContest("Give me total tables")
+write chat.irisDB("Give me total tables")
 ```
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/adba2e12-3066-4c00-a595-0c22dcb95100)
 
