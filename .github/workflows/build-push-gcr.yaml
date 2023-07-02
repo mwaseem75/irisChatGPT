@@ -9,7 +9,7 @@ on:
 env:
   # Change this section according to your needs
   IMAGE_NAME: irischatgpt-image
-  SERVICE: irisChatGPT
+  SERVICE: irischatgpt
   DOMAIN_NAME: irischatgpt.demo.community.intersystems.com
 
   # Leave this section untouched
