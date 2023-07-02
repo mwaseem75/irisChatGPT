@@ -12,7 +12,7 @@ Application is built by using objectscript with the help of  [intersystems Embed
 * Built-in [Intersystems ObjectScript Reference](https://docs.intersystems.com/iris20231/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS) ChatGPT
 * Built-in [InterSystems Grand Prix Contest 2023](https://community.intersystems.com/post/intersystems-grand-prix-contest-2023) ChatGPT
 * Answer questions over a Cache database by using SQLDatabaseChain
-* Create your own chatGPT model by using PDF, work and text documents
+* Create your own chatGPT model by using PDF, word and text documents
 * OpenAI ChatGPT
 * Wikipedia Search
 * Search on the internet by using DuckDuckGo (DDG) general search engine
