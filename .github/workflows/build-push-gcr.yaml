@@ -8,9 +8,9 @@ on:
 
 env:
   # Change this section according to your needs
-  IMAGE_NAME: irisChatGPT-image
+  IMAGE_NAME: irischatgpt-image
   SERVICE: irisChatGPT
-  DOMAIN_NAME: irisChatGPT.demo.community.intersystems.com
+  DOMAIN_NAME: irischatgpt.demo.community.intersystems.com
 
   # Leave this section untouched
   PROJECT_ID:   iris-community-demos
