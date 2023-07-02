@@ -90,7 +90,7 @@ write chat.irisDB("Give me total tables")
 
 #### Create your own chatGPT model by using PDF, word and text documents
 ##### Use ingest function to upload the document
-Copy your document to <ManagerDirectory> folder and then use the below command to ingest the data. 
+Copy your document to ManagerDirectory()+'pdfdata/' folder and then use the below command to ingest the data. 
 (The repository already contains [Defining and Using Classes](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ) PDF which we will upload by using the below command)
 ```
 set doc = ##class(dc.irisChatGPT).ingest("GOBJ.pdf")
