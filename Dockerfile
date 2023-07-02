@@ -1,6 +1,6 @@
-#ARG IMAGE=intersystemsdc/iris-community
+ARG IMAGE=intersystemsdc/iris-community
 #ARG IMAGE=intersystemsdc/iris-community:preview
-ARG IMAGE=intersystemsdc/iris-community:latest
+#ARG IMAGE=intersystemsdc/iris-community:latest
 FROM $IMAGE
 
 USER root   
