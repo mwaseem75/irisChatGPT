@@ -74,20 +74,26 @@ write chat.irisDocs("Give me details of %$PIECE function with syntax")
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/ba064270-ed6e-4c8d-b8a3-5f38fcec3007)
 
 #### Chat with [InterSystems Grand Prix Contest 2023](https://community.intersystems.com/post/intersystems-grand-prix-contest-2023)
+```
+write chat.irisContest("Give me Prizes and nominations")
+```
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/ae4b7f93-eac6-4af9-8494-5b7653c19bd8)
 
 #### Answer questions over a Cache database by using SQLDatabaseChain
+```
+write chat.irisContest("Give me total tables")
+```
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/adba2e12-3066-4c00-a595-0c22dcb95100)
 
 
-#### Create your own chatGPT model by using PDF, work and text documents
+#### Create your own chatGPT model by using PDF, word and text documents
 ##### Use ingest function to upload the document
 Copy your document to <ManagerDirectory> folder and then use the below command to ingest the data. 
-The repository already contains [Defining and Using Classes](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ) PDF which we will upload by using the below command
+(The repository already contains [Defining and Using Classes](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ) PDF which we will upload by using the below command)
 ```
 set doc = ##class(dc.irisChatGPT).ingest("GOBJ.pdf")
 ```
-##### Now we will use personalGPT function for our doucment
+##### Now we will use personalGPT function to chat with our document
 ```
 w chat.personalGPT("Give me details of objects and properties") 
 ```
