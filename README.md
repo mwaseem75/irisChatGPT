@@ -18,10 +18,10 @@ Application is built by using objectscript with the help of  [intersystems Embed
 * Search on the internet by using DuckDuckGo (DDG) general search engine
 * Generate Python code by using Python REPL LangChain functionality
 * Streamlit Web application
-   * Intersystems objectscript reference ChatGPT
-   * Intersystems grand prix contest ChatGPT
-   * Select and upload your own document for ChatGPT 
-   * OpenAI ChatGPT
+   * Intersystems objectscript reference ChatGPT (Web interface)
+   * Intersystems grand prix contest ChatGPT (Web interface)
+   * Select and upload your own document for ChatGPT (Web Interface)
+   * OpenAI ChatGPT (Web interface)
 
 ## How to Run
 
