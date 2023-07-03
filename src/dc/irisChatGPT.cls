@@ -108,23 +108,13 @@ ClassMethod ingest(filePath) [ Language = python ]
 	filePath = iris.cls("%SYSTEM.Util").ManagerDirectory()+'pdfdata/'+filePath
 	filename, file_extension = os.path.splitext(filePath)
 	if file_extension == '.pdf':
-		fileType = "PDF"
+	    loader = PyPDFLoader(filePath)       
 	elif file_extension == '.docx' or file_extension=='.doc':
-		fileType = "DOC"
+	    loader = UnstructuredWordDocumentLoader(filePath)
 	elif file_extension == '.txt':
-		fileType = "TXT"
+	    loader = TextLoader(filePath)    
 	else:
-		fileType = "UNKOWN"
-
-	if fileType == "UNKOWN":
-		return "Please provide PDF,DOC or TXT file to ingest"
-	elif fileType == "PDF":
-		loader = PyPDFLoader(filePath)       
-	elif fileType == "DOC":
-		## Load and process the text
-		loader = UnstructuredWordDocumentLoader(filePath)
-	elif fileType == "TXT":
-		loader = TextLoader(filePath)    
+	    return "Please provide PDF,DOC or TXT file to ingest"
 	
 	try:
 		documents = loader.load()
