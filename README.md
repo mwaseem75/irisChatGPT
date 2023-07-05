@@ -128,7 +128,14 @@ w chat.pythonREPL("Write a function to check if 11 a prime number and test it")
 #
 ## Streamlit Web application
 Navigate to [Streamlit Web Application](http://localhost:8501) or [CSP Web application](http://localhost:55037/csp/irisChatGPT/index.csp)
+
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/a3d3279a-d00a-431b-bab7-b9db5eec75cc)
+![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/60ef35c9-7f19-4720-aa3f-6505da57182f)
+![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/ddbc449d-7ffb-41cf-b1f6-4f0a8a3cef90)
+![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/05993c01-e8a8-43e8-b108-2840b2979a76)
+
+
+
 
 
 ## Thanks
