@@ -33,6 +33,7 @@ ClassMethod openAI(query) [ Language = python ]
 	#llm
 	try:
 		llm = ChatOpenAI(temperature=0,openai_api_key=apiKey, model_name=MODEL, verbose=False) 
+		#Conversational memory is how a chatbot can respond to multiple queries
 		entity_memory = ConversationEntityMemory(llm=llm, k=K )
 		qa = ConversationChain(llm=llm,   prompt=ENTITY_MEMORY_CONVERSATION_TEMPLATE, memory=entity_memory)
 		ret = '\n'+qa.run(query)+'\n'
@@ -118,6 +119,7 @@ ClassMethod ingest(filePath) [ Language = python ]
 	
 	try:
 		documents = loader.load()
+		#In order to split the document we need to import RecursiveCharacterTextSplitter from Langchain framework  
 		text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
 		texts = text_splitter.split_documents(documents)
 		# Embed and store the texts
@@ -159,6 +161,7 @@ ClassMethod irisDocs(query) [ Language = python ]
 	try:
 		vectordb = Chroma(persist_directory=persist_directory, embedding_function=embedding)
 		memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
+		#The ConversationalRetrievalChain is a conversational AI model that is designed to retrieve relevant responses based on user queries
 		qa = ConversationalRetrievalChain.from_llm(OpenAI(temperature=0), vectordb.as_retriever(), memory=memory)
 		ret = '\n'+qa.run(query)+'\n'
 	except Exception as e:
@@ -225,6 +228,7 @@ ClassMethod personalGPT(query) [ Language = python ]
 	try:
 		vectordb = Chroma(persist_directory=persist_directory, embedding_function=embedding)
 		memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
+		#The ConversationalRetrievalChain is a conversational AI model that is designed to retrieve relevant responses based on user queries
 		qa = ConversationalRetrievalChain.from_llm(OpenAI(temperature=0), vectordb.as_retriever(), memory=memory)
 		ret = '\n'+qa.run(query)+'\n'
 	except Exception as e:
