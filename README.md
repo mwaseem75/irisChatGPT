@@ -11,6 +11,7 @@ Application is built by using objectscript with the help of  [intersystems Embed
 ## Features
 * Built-in [Intersystems ObjectScript Reference](https://docs.intersystems.com/iris20231/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS) ChatGPT
 * Built-in [InterSystems Grand Prix Contest 2023](https://community.intersystems.com/post/intersystems-grand-prix-contest-2023) ChatGPT
+* ChatGPT with FHIR server
 * Answer questions over a Cache database by using SQLDatabaseChain
 * Create your own chatGPT model by using PDF, word and text documents
 * OpenAI ChatGPT
@@ -80,6 +81,14 @@ write chat.irisDocs("Give me details of %$PIECE function with syntax")
 write chat.irisContest("Give me Prizes and nominations")
 ```
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/ae4b7f93-eac6-4af9-8494-5b7653c19bd8)
+
+#### ChatGPT with FHIR server
+We need to first set FHIR Endpoint by using SetFHIRUrl method
+```
+do chat.SetFHIRUrl = ""
+```
+Once URL is set, Now we can ask questions about Patient and Observation resources
+
 
 #### Answer questions over a Cache database by using SQLDatabaseChain
 ```
