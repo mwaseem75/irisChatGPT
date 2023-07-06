@@ -86,13 +86,17 @@ write chat.irisContest("Give me Prizes and nominations")
 
 We need to first set FHIR Endpoint by using SetFHIRUrl method. 
 Currently, I am setting the FHIR server End point running in docker
+
 ```
 do chat.SetFHIRUrl("http://localhost:52773/csp/healthshare/fhirserver/fhir/r4/")
 ```
+
 Once URL is set, Now we can ask questions about Patient and Observation resources
+
 ```
 write chat.irisFHIR("Give me total patients")
 ```
+
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/e2f64db1-09d4-40a7-a643-1281b981950f)
 ```
 write chat.irisFHIR("List down all the Male Patients")
