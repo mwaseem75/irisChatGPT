@@ -5,12 +5,13 @@ Application is built by using objectscript with the help of  [intersystems Embed
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/e84ecde9-24a6-475e-b598-6a7f3abe1410)
 
 
-## Streamlit Web Application Layout
+# Streamlit Web Application Layout
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/acfb914e-560f-4554-babb-1a65b1531a57)
 
-## Features
+# Features
 * Built-in [Intersystems ObjectScript Reference](https://docs.intersystems.com/iris20231/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS) ChatGPT
 * Built-in [InterSystems Grand Prix Contest 2023](https://community.intersystems.com/post/intersystems-grand-prix-contest-2023) ChatGPT
+* ChatGPT with FHIR server
 * Answer questions over a Cache database by using SQLDatabaseChain
 * Create your own chatGPT model by using PDF, word and text documents
 * OpenAI ChatGPT
@@ -23,7 +24,7 @@ Application is built by using objectscript with the help of  [intersystems Embed
    * Select and upload your own document for ChatGPT (Web Interface)
    * OpenAI ChatGPT (Web interface)
 
-## How to Run
+# How to Run
 
 To start coding with this repo, you do the following:
 
@@ -45,12 +46,12 @@ docker-compose build
 docker-compose up -d
 ```
 
-## Installation with ZPM
+# Installation with ZPM
 ```
 zpm "install irisChatGPT.ZPM"
 ```
-## Getting Started 
-#### Get OpenAI Key
+# Getting Started 
+## Get OpenAI Key
 Application requires OpenAI API Key, sign up for OpenAI API on [this page](https://platform.openai.com/account/api-keys). Once you signed up and logged in, click on Personal, and select View API keys in drop-down menu. Create and copy the API Key
 
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/7e7c7880-b9ac-4a60-9ec9-289dd2375a73)
@@ -69,57 +70,79 @@ do chat.SetAPIKey("Enter your Open API Key here")
 ```
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/dd4303ca-6ff4-48a0-92c1-70a2ad18cdec)
 
-#### Chat with [Intersystems objectscript reference](https://docs.intersystems.com/iris20231/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS)
+## Chat with [Intersystems objectscript reference](https://docs.intersystems.com/iris20231/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS)
 ```
 write chat.irisDocs("Give me details of %$PIECE function with syntax")
 ```
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/ba064270-ed6e-4c8d-b8a3-5f38fcec3007)
 
-#### Chat with [InterSystems Grand Prix Contest 2023](https://community.intersystems.com/post/intersystems-grand-prix-contest-2023)
+## Chat with [InterSystems Grand Prix Contest 2023](https://community.intersystems.com/post/intersystems-grand-prix-contest-2023)
 ```
 write chat.irisContest("Give me Prizes and nominations")
 ```
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/ae4b7f93-eac6-4af9-8494-5b7653c19bd8)
 
-#### Answer questions over a Cache database by using SQLDatabaseChain
+## ChatGPT with FHIR server
+
+We need to first set FHIR Endpoint by using SetFHIRUrl method. 
+Currently, I am setting the FHIR server End point running in docker
+```
+do chat.SetFHIRUrl("http://localhost:52773/csp/healthshare/fhirserver/fhir/r4/")
+```
+Once URL is set, Now we can ask questions about Patient and Observation resources
+```
+write chat.irisFHIR("Give me total patients")
+```
+![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/e2f64db1-09d4-40a7-a643-1281b981950f)
+```
+write chat.irisFHIR("List down all the Male Patients")
+```
+![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/a7c72334-cc65-493d-9002-ff977336fbd1)
+```
+write chat.irisFHIR("Give me observation details of patient 175")
+```
+![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/cd8b8527-8baf-48a7-838c-f8642e6742b8)
+
+
+## Answer questions over a Cache database by using SQLDatabaseChain
 ```
 write chat.irisDB("Give me total tables")
 ```
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/adba2e12-3066-4c00-a595-0c22dcb95100)
 
 
-#### Create your own chatGPT model by using PDF, word and text documents
-##### Use ingest function to upload the document
+## Create your own chatGPT model by using PDF, word and text documents
+#### Use ingest function to upload the document
 Copy your document to ManagerDirectory()+'pdfdata/' folder and then use the below command to ingest the data. 
 (The repository already contains [Defining and Using Classes](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ) PDF which we will upload by using the below command)
 ```
 set doc = ##class(dc.irisChatGPT).ingest("GOBJ.pdf")
 ```
-##### Now we will use personalGPT function to chat with our document
+#### Now we will use personalGPT function to chat with our document
 ```
 w chat.personalGPT("Give me details of objects and properties") 
 ```
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/de44febe-c028-4b57-aa47-25bcd643f9d0)
 
-#### OpenAI ChatGPT
+## OpenAI ChatGPT
 ```
 w chat.openAI("Give me details of Intersystems")
 ```
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/68574d29-8a8b-4c54-b3e1-569240e117af)
 
-#### Wikipedia Search
+## Wikipedia Search
 ```
 w chat.wikiPedia("LangChain")   
 ```
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/d272bc12-12a8-4062-a73a-bcdb75d46f8d)
 
-#### Search on the internet by using DuckDuckGo (DDG) general search engine
+## Search on the internet by using DuckDuckGo (DDG) general search engine
 ```
 w chat.duckDuckGo("What is the Capital of USA")
 ```
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/64c1c1ff-95af-44e3-9a18-5d77dcbc5fa8)
 
-#### Generate Python code by using Python REPL LangChain functionality
+## Generate Python code by using Python REPL LangChain functionality
 ```
 w chat.pythonREPL("Write a function to check if 11 a prime number and test it")
 ```
