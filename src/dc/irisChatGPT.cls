@@ -46,7 +46,7 @@ ClassMethod openAI(query) [ Language = python ]
 		qa = ConversationChain(llm=llm,   prompt=ENTITY_MEMORY_CONVERSATION_TEMPLATE, memory=entity_memory)
 		ret = '\n'+qa.run(query)+'\n'
 	except Exception as e:  
-		return e
+		print(e)
 
 	return ret
 }
@@ -138,7 +138,7 @@ ClassMethod ingest(filePath) [ Language = python ]
 		vectordb.persist()
 		vectordb = None
 	except Exception as e:
-		return e
+		print(e)
 
 	return "File uploaded successfully"
 }
@@ -173,7 +173,7 @@ ClassMethod irisDocs(query) [ Language = python ]
 		qa = ConversationalRetrievalChain.from_llm(OpenAI(temperature=0), vectordb.as_retriever(), memory=memory)
 		ret = '\n'+qa.run(query)+'\n'
 	except Exception as e:
-		return e
+		print(e)
 	return ret
 }
 
@@ -206,7 +206,7 @@ ClassMethod irisContest(query) [ Language = python ]
 		qa = ConversationalRetrievalChain.from_llm(OpenAI(temperature=0), vectordb.as_retriever(), memory=memory)
 		ret = '\n'+qa.run(query)+'\n'
 	except Exception as e:
-		return e
+		print(e)
 	return ret
 }
 
@@ -240,7 +240,7 @@ ClassMethod personalGPT(query) [ Language = python ]
 		qa = ConversationalRetrievalChain.from_llm(OpenAI(temperature=0), vectordb.as_retriever(), memory=memory)
 		ret = '\n'+qa.run(query)+'\n'
 	except Exception as e:
-		return e
+		print(e)
 	return ret
 }
 
@@ -264,7 +264,7 @@ ClassMethod wikiPedia(query) [ Language = python ]
 		wikipedia = WikipediaAPIWrapper()
 		ret = '\n'+wikipedia.run(query)+'\n'
 	except Exception as e:
-		return e
+		print(e)
 		
 	return ret
 }
@@ -289,7 +289,7 @@ ClassMethod duckDuckGo(query) [ Language = python ]
 		search = DuckDuckGoSearchRun()
 		ret = '\n'+search.run(query)+'\n'
 	except Exception as e:
-		return e
+		print(e)
 		
 	return ret
 }
@@ -321,7 +321,7 @@ ClassMethod pythonREPL(query) [ Language = python ]
 		)
 		ret = agent_exec.run(query)
 	except Exception as e:
-		return e
+		print(e)
 		
 	return ret
 }
@@ -389,11 +389,103 @@ ClassMethod irisFHIR(query) [ Language = python ]
 	            rowval.get_by_path('valueQuantity.value'),rowval.get_by_path('valueQuantity.code'),rowval.get_by_path('effectiveDateTime'),rowval.get_by_path('subject.reference')]
 	        rows.append(row)    
 	observations = pd.DataFrame(rows,columns=header)
+	#Get Procedures
+	data = ""
+	try:
+	    data = client.resources("Procedure").fetch()           
+	except Exception as e:
+	    print(e)
+
+	header = ["Procedure ID","Procedure Code","Procedure Details","Procedure StartDate","Procedure EndDate","Procedure Status","Patient ID"]  
+	rows = []
+	for rowval in data:
+	        row =  [rowval.get('id'),
+                rowval.get_by_path('code.coding.0.code'),
+                rowval.get_by_path('code.coding.0.display'),
+                rowval.get_by_path('performedPeriod.start'),
+                rowval.get_by_path('performedPeriod.end'),
+                rowval.get_by_path('status'),
+                rowval.get_by_path('subject.reference')           
+                ]
+	        rows.append(row)    
+	procedures = pd.DataFrame(rows,columns=header)
+	#Get Immunization
+	data = ""
+	try:
+	    data = client.resources("Immunization").fetch()           
+	except Exception as e:
+	    print(e)
+
+	header = ["Immunization ID","VaccineCode","Immunization Details","Immunization Date","Encounter","Immunization Status","Patient ID"]
+	rows = []
+	for rowval in data:
+	        row =  [rowval.get('id'),
+                rowval.get_by_path('vaccineCode.coding.0.code'),
+                rowval.get_by_path('vaccineCode.coding.0.display'),
+                rowval.get('occurrenceDateTime'),
+                rowval.get_by_path('encounter.reference'),
+                rowval.get_by_path('status'),
+                rowval.get_by_path('patient.reference')     
+                ]
+	        rows.append(row)    
+	Immunizations = pd.DataFrame(rows,columns=header)
+	#Getting Encounter Details
+	data = ""
+	try:
+	    data = client.resources("Encounter").fetch()           
+	except Exception as e:
+	    print(e)
+
+	header = ["Encounter ID","Encounter Class","Encounter StartDate","Encounter EndDate","Encounter Provider","Encounter Status","Patient ID"]   
+	rows = []
+	for rowval in data:
+	        row =  [rowval.get('id'),
+                rowval.get_by_path('class.code'),
+                rowval.get_by_path('period.start'),
+                rowval.get_by_path('period.end'),
+                rowval.get_by_path('serviceProvider.reference'),
+                rowval.get_by_path('status'),
+                rowval.get_by_path('subject.reference')] 
+	        rows.append(row)    
+	Encounters = pd.DataFrame(rows,columns=header)
+	#Getting Encounter Details
+	data = ""
+	try:
+	    data = client.resources("Condition").fetch()           
+	except Exception as e:
+	    print(e)
+
+	header = ["ID","Code","Details","ClinicalStatus","VerificationStatus","Patient ID"]    
+	rows = []
+	for rowval in data:
+	        row =  [rowval.get('id'),
+                rowval.get_by_path('code.coding.0.code'),
+                rowval.get_by_path('code.coding.0.display'),
+                rowval.get_by_path('clinicalStatus.coding.0.code'),           
+                rowval.get_by_path('verificationStatus.coding.0.code'),    
+                rowval.get_by_path('subject.reference')] 
+	        rows.append(row)    
+	Conditions = pd.DataFrame(rows,columns=header)
+	#Getting Practitioner Details
+	data = ""
+	try:
+	    data = client.resources("Practitioner").fetch()           
+	except Exception as e:
+	    print(e)
+
+	header = ["Practitioner ID","Practitioner Name","Practitioner Gender","Practitioner Contact"]       
+	rows = []
+	for rowval in data:
+	        row =   [rowval.get('id'),
+                rowval.get_by_path('name.0.prefix.0')+' '+rowval.get_by_path('name.0.family')+' '+rowval.get_by_path('name.0.given.0'),
+                rowval.get('gender'),rowval.get_by_path('telecom.0.value')]
+	        rows.append(row)    
+	Practitioners = pd.DataFrame(rows,columns=header)
 	########################################################################        
 	try:
-		agent = create_pandas_dataframe_agent(OpenAI(temperature=0), [patients, observations], verbose=True)
+		agent = create_pandas_dataframe_agent(OpenAI(temperature=0), [patients, observations,procedures,Immunizations,Encounters,Conditions,Practitioners], verbose=True)
 	except Exception as e:
-	    return e
+	    print(e)
 	return '\n'+agent.run(query)+'\n'
 }
 
