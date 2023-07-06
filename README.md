@@ -65,6 +65,7 @@ docker-compose exec iris iris session iris
 ```
 set chat = ##class(dc.irisChatGPT).%New()
 ```
+
 ```
 do chat.SetAPIKey("Enter your Open API Key here")
 ```
@@ -96,32 +97,38 @@ Once URL is set, Now we can ask questions about Patient and Observation resource
 ```
 write chat.irisFHIR("Give me total patients")
 ```
-
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/e2f64db1-09d4-40a7-a643-1281b981950f)
+
 ```
 write chat.irisFHIR("List down all the Male Patients")
 ```
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/a7c72334-cc65-493d-9002-ff977336fbd1)
+
 ```
 write chat.irisFHIR("Give me observation details of patient 175")
 ```
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/cd8b8527-8baf-48a7-838c-f8642e6742b8)
+
 ```
 write chat.irisFHIR("Give me procedure of patients id 1") 
 ```
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/fd0de05e-ce9b-45b8-a14e-0586156766ed)
+
 ```
 write chat.irisFHIR("Give me Immunizations  of patients id 175") 
 ```
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/1e423b9e-8b26-40c1-8cbc-d11cb15133c3)
+
 ```
 write chat.irisFHIR("Give me all the encounters of year 2012") 
 ```
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/449aeee9-3c1c-4616-977d-21b676ec3f0c)
+
 ```
 write chat.irisFHIR("Give me condition of patient id 175")  
 ```
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/f52fe240-36ce-48f1-bfdd-0c9d2d06c441)
+
 ```
 write chat.irisFHIR("Give me all female practioners")  
 ```
