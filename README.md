@@ -110,7 +110,10 @@ write chat.irisFHIR("Give me observation details of patient 175")
 write chat.irisFHIR("Give me procedure of patients id 1") 
 ```
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/fd0de05e-ce9b-45b8-a14e-0586156766ed)
-
+```
+write chat.irisFHIR("Give me Immunizations  of patients id 175") 
+```
+![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/1e423b9e-8b26-40c1-8cbc-d11cb15133c3)
 
 ## Answer questions over a Cache database by using SQLDatabaseChain
 ```
