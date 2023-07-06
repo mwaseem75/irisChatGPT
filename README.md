@@ -114,6 +114,20 @@ write chat.irisFHIR("Give me procedure of patients id 1")
 write chat.irisFHIR("Give me Immunizations  of patients id 175") 
 ```
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/1e423b9e-8b26-40c1-8cbc-d11cb15133c3)
+```
+write chat.irisFHIR("Give me all the encounters of year 2012") 
+```
+![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/449aeee9-3c1c-4616-977d-21b676ec3f0c)
+```
+write chat.irisFHIR("Give me condition of patient id 175")  
+```
+![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/f52fe240-36ce-48f1-bfdd-0c9d2d06c441)
+```
+write chat.irisFHIR("Give me all female practioners")  
+```
+![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/62d28bce-7c62-42aa-b2d0-78a964ebb0ef)
+
+
 
 ## Answer questions over a Cache database by using SQLDatabaseChain
 ```
