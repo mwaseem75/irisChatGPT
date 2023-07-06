@@ -83,9 +83,10 @@ write chat.irisContest("Give me Prizes and nominations")
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/ae4b7f93-eac6-4af9-8494-5b7653c19bd8)
 
 #### ChatGPT with FHIR server
-We need to first set FHIR Endpoint by using SetFHIRUrl method
+We need to first set FHIR Endpoint by using SetFHIRUrl method. 
+Currently, I am setting the FHIR server End point running in docker
 ```
-do chat.SetFHIRUrl = ""
+do chat.SetFHIRUrl("http://localhost:52773/csp/healthshare/fhirserver/fhir/r4/")
 ```
 Once URL is set, Now we can ask questions about Patient and Observation resources
 
