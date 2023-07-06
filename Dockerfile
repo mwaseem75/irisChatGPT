@@ -1,6 +1,8 @@
-ARG IMAGE=intersystemsdc/iris-community
+#ARG IMAGE=intersystemsdc/iris-community
 #ARG IMAGE=intersystemsdc/iris-community:preview
 #ARG IMAGE=intersystemsdc/iris-community:latest
+ARG IMAGE=intersystemsdc/irishealth-community:latest
+
 FROM $IMAGE
 
 USER root   
@@ -11,6 +13,7 @@ USER ${ISC_PACKAGE_MGRUSER}
 
 COPY  python python
 COPY  pdfdata pdfdata
+COPY  data/fhir fhirdata
 COPY  src src
 COPY module.xml module.xml
 COPY iris.script iris.script

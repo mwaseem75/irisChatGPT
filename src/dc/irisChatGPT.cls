@@ -9,7 +9,15 @@ ClassMethod SetAPIKey(Key As %String) As %Integer
 	Quit $$$OK
 }
 
-// usage of OpenAI by using chatGPT model gpt-3-turbo-0613
+// Set API key by using global variable
+
+ClassMethod SetFHIRUrl(URL As %String) As %Integer
+{
+	Set ^ChatGPTFHIRUrl(1) = URL
+	Quit $$$OK
+}
+
+// ChatGPT with OPENAI
 
 ClassMethod openAI(query) [ Language = python ]
 {
@@ -76,7 +84,7 @@ ClassMethod irisDB(query) [ Language = python ]
 	PROMPT = PromptTemplate(
 	    input_variables=["input", "dialect"], template=_DEFAULT_TEMPLATE
 	)
-
+	#Cache connection parameters, Modify accoringly 
 	db = SQLDatabase.from_uri("iris://superuser:SYS@localhost:1972/USER") 
 
 	llm = OpenAI(temperature=0, verbose=True)
@@ -316,6 +324,77 @@ ClassMethod pythonREPL(query) [ Language = python ]
 		return e
 		
 	return ret
+}
+
+// CHATGpt with FHIR, Patients and Observations
+
+ClassMethod irisFHIR(query) [ Language = python ]
+{
+	from fhirpy import SyncFHIRClient
+	from langchain.agents import create_pandas_dataframe_agent
+	from langchain.llms.openai import OpenAI
+	from fhirpy import SyncFHIRClient
+	import os,iris
+	import pandas as pd
+
+	contentType = "application/fhir+json"
+
+	#Get FHIR Server End point
+	FHIRurl = iris.gref("^ChatGPTFHIRUrl")
+	try:
+	    url = FHIRurl.get([1])
+	except:
+	    return "Please define FHIR End point by calling SetFHIRUrl(url) method"
+	    
+	#Add / at the end of endpoint if not added
+	if url[-1]!="/":
+	    url=url+"/"
+	    	
+	#Get all patients
+	client = SyncFHIRClient(url = url, extra_headers={"Content-Type":contentType,"x-api-key":""})
+
+	#Get Api key
+	apiKeyRef = iris.gref("^ChatGPTKey")
+	try:
+	    apiKey = apiKeyRef.get([1])
+	except:
+	    return "Please define ApiKey by calling SetApiKey(key) method"
+
+	os.environ['OPENAI_API_KEY'] = apiKey
+	#Get Patient data and convert to panda dataframe
+	data = ""
+	try:
+	    data = client.resources("Patient").fetch()           
+	except Exception as e:
+	    print(e)
+	
+	header = ["Patient ID","Patient Family Name","Patient Given Name","Patient DOB","Patient Gender"]
+	rows = []
+	for rowval in data:
+	        row = [rowval.get('id'),rowval.get_by_path('name.0.family'),rowval.get_by_path('name.0.given.0'),rowval.get_by_path('birthDate'),rowval.get_by_path('gender')]
+	        rows.append(row)    
+	patients = pd.DataFrame(rows,columns=header)
+
+	#Get Observation data and convert to panda dataframe
+	data = ""
+	try:
+	    data = client.resources("Observation").fetch()           
+	except Exception as e:
+	    print(e)
+
+	header = ["Observation ID","Observation Category","Observation Code","Observation Value","Observation UOM","Observation Date","Patient ID"]        
+	rows = []
+	for rowval in data:
+	        row = [rowval.get('id'),rowval.get_by_path('category.0.coding.0.code'),rowval.get_by_path('code.coding.0.code'),
+	            rowval.get_by_path('valueQuantity.value'),rowval.get_by_path('valueQuantity.code'),rowval.get_by_path('effectiveDateTime'),rowval.get_by_path('subject.reference')]
+	        rows.append(row)    
+	observations = pd.DataFrame(rows,columns=header)
+	########################################################################        
+	try:
+		agent = create_pandas_dataframe_agent(OpenAI(temperature=0), [patients, observations], verbose=True)
+	except Exception as e:
+	    return e
+	return '\n'+agent.run(query)+'\n'
 }
 
 }

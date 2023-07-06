@@ -7,4 +7,7 @@ clickhouse-connect==0.5.22
 sqlalchemy-iris
 wikipedia
 duckduckgo-search
+fhirpy
+pandas
+tabulate
 
