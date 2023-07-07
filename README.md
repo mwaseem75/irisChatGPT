@@ -88,7 +88,8 @@ write chat.irisContest("Give me Prizes and nominations")
 Repository will load FHIR Resources, All you need is to configure FHIR SQL BUILDER.
 For configuration, Navigate to [http://localhost:55037/csp/fhirsql/index.csp](http://localhost:55037/csp/fhirsql/index.csp#)
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/2c41bbbd-5e80-4732-8fd1-23b4688fa554)
-For more details about how to do configuration, please watch this [Tutorial Video](https://learning.intersystems.com/course/view.php?name=ProjectingHL7FHIRTables)
+For more details about configuration, please watch this [Tutorial Video](https://learning.intersystems.com/course/view.php?name=ProjectingHL7FHIRTables) and check 
+[iris-fhirsqlbuilder application](https://openexchange.intersystems.com/package/iris-fhirsqlbuilder) by @Guillaume Rongier
 
 Please note that I am using FHIR as package name
 
