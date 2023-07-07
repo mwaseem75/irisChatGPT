@@ -11,6 +11,7 @@ Application is built by using objectscript with the help of  [intersystems Embed
 # Features
 * Built-in [Intersystems ObjectScript Reference](https://docs.intersystems.com/iris20231/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS) ChatGPT
 * Built-in [InterSystems Grand Prix Contest 2023](https://community.intersystems.com/post/intersystems-grand-prix-contest-2023) ChatGPT
+* [INTERSYSTEMS FHIR SQL BUILDER](https://docs.intersystems.com/components/csp/docbook/DocBook.UI.Page.cls?KEY=AFSB) ChatGPT
 * ChatGPT with FHIR server
 * Answer questions over a Cache database by using SQLDatabaseChain
 * Create your own chatGPT model by using PDF, word and text documents
@@ -82,6 +83,48 @@ write chat.irisDocs("Give me details of %$PIECE function with syntax")
 write chat.irisContest("Give me Prizes and nominations")
 ```
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/ae4b7f93-eac6-4af9-8494-5b7653c19bd8)
+
+## [INTERSYSTEMS FHIR SQL BUILDER](https://docs.intersystems.com/components/csp/docbook/DocBook.UI.Page.cls?KEY=AFSB) BUILDER ChatGPT
+Repository will load FHIR Resources, All you need is to configure FHIR SQL BUILDER.
+
+Once configured, we can do ChatGPT with FHIR SQL 
+```
+write chat.irisFHIRSQL("Give me total patients")
+```
+![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/eaa04b92-2a20-4ca0-9ef2-495735a76b28)
+
+
+```
+write chat.irisFHIRSQL("List down all the Male Patients")
+```
+![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/3637e5b2-b63c-49d0-bf51-b52203843ee6)
+
+```
+write chat.irisFHIRSQL("Give me patients where birthdate < 2000")
+```
+![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/bc9a9247-1153-4218-b968-ee23c66c32eb)
+
+```
+write chat.irisFHIRSQL("Give me observation details of patient 175")
+```
+![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/468661a6-46f1-4d13-bff5-998f16ad0f41)
+
+```
+write chat.irisFHIRSQL("Give me total encounter of 175")  
+```
+![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/790c397b-4b6f-4936-915e-851a94ffc50f)
+
+```
+write chat.irisFHIRSQL("Give me goal of Patient 175")  
+```
+![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/04c10a07-be90-4540-93c7-52084176ead2)
+
+```
+write chat.irisFHIRSQL("Give me details of Organization 80")  
+```
+![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/314aff7a-4300-40a4-86d5-04f07b0d932f)
+
+
 
 ## ChatGPT with FHIR server
 
