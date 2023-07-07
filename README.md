@@ -93,7 +93,8 @@ For more details about how to do configuration, please watch this [Tutorial Vide
 To view the specification, Navigate to [http://localhost:55037/csp/fhirsql/index.csp/spec#/1](http://localhost:55037/csp/fhirsql/index.csp/spec#/1) 
 ![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/2477efef-6a6f-4aa3-86ac-12b1cf5904fe)
 
-Once configured, we can do ChatGPT with FHIR SQL 
+After the configuration, we can do ChatGPT with FHIR SQL 
+
 ```
 write chat.irisFHIRSQL("Give me total patients")
 ```
