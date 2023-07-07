@@ -1,0 +1,198 @@
+{
+    "name": "T1",
+    "description": "",
+    "resources": [
+      {
+        "resourceType": "Patient",
+        "columns": [
+          {
+            "name": "NameUse",
+            "type": "String",
+            "path": "Patient.name.use",
+            "index": false
+          },
+          {
+            "name": "NameFamily",
+            "type": "String",
+            "path": "Patient.name.family",
+            "index": false
+          },
+          {
+            "name": "NameGiven",
+            "type": "String",
+            "path": "Patient.name.given",
+            "index": false
+          },
+          {
+            "name": "NamePrefix",
+            "type": "String",
+            "path": "Patient.name.prefix",
+            "index": false
+          },
+          {
+            "name": "Gender",
+            "type": "String",
+            "path": "Patient.gender",
+            "index": false
+          },
+          {
+            "name": "BirthDate",
+            "type": "String",
+            "path": "Patient.birthDate",
+            "index": false
+          },
+          {
+            "name": "AddressCity",
+            "type": "String",
+            "path": "Patient.address.city",
+            "index": false
+          },
+          {
+            "name": "IdentifierTypeCodingCode",
+            "type": "String",
+            "path": "Patient.identifier.type.coding.where(code = 'DL').code",
+            "index": false
+          },
+          {
+            "name": "IdentifierValue",
+            "type": "String",
+            "path": "Patient.identifier.where(type.coding.code = 'DL').value",
+            "index": false
+          }
+        ]
+      },
+      {
+        "resourceType": "AllergyIntolerance",
+        "columns": [
+          {
+            "name": "CodeCodingDisplay",
+            "type": "String",
+            "path": "AllergyIntolerance.code.coding.display",
+            "index": false
+          },
+          {
+            "name": "CodeCodingCode",
+            "type": "String",
+            "path": "AllergyIntolerance.code.coding.code",
+            "index": false
+          },
+          {
+            "name": "PatientReference",
+            "type": "String",
+            "path": "AllergyIntolerance.patient.reference",
+            "index": false
+          },
+          {
+            "name": "ClinicalStatusCodingCode",
+            "type": "String",
+            "path": "AllergyIntolerance.clinicalStatus.coding.code",
+            "index": false
+          }
+        ]
+      },
+      {
+        "resourceType": "Observation",
+        "columns": [
+          {
+            "name": "SubjectReference",
+            "type": "String",
+            "path": "Observation.subject.reference",
+            "index": false
+          },
+          {
+            "name": "CodeCodingDisplay",
+            "type": "String",
+            "path": "Observation.code.coding.display",
+            "index": false
+          },
+          {
+            "name": "CodeCodingCode",
+            "type": "String",
+            "path": "Observation.code.coding.code",
+            "index": false
+          },
+          {
+            "name": "ValueQuantityValue",
+            "type": "Number",
+            "path": "Observation.valueQuantity.value",
+            "index": false
+          },
+          {
+            "name": "ValueQuantityUnit",
+            "type": "String",
+            "path": "Observation.valueQuantity.unit",
+            "index": false
+          },
+          {
+            "name": "ValueQuantityCode",
+            "type": "String",
+            "path": "Observation.valueQuantity.code",
+            "index": false
+          }
+        ]
+      },
+      {
+        "resourceType": "Organization",
+        "columns": [
+          {
+            "name": "AddressCity",
+            "type": "String",
+            "path": "Organization.address.city",
+            "index": false
+          },
+          {
+            "name": "Name",
+            "type": "String",
+            "path": "Organization.name",
+            "index": false
+          },
+          {
+            "name": "IdentifierValue",
+            "type": "String",
+            "path": "Organization.identifier.value",
+            "index": false
+          }
+        ]
+      },
+      {
+        "resourceType": "Encounter",
+        "columns": [
+          {
+            "name": "SubjectReference",
+            "type": "String",
+            "path": "Encounter.subject.reference",
+            "index": false
+          },
+          {
+            "name": "ServiceProviderReference",
+            "type": "String",
+            "path": "Encounter.serviceProvider.reference",
+            "index": false
+          }
+        ]
+      },
+      {
+        "resourceType": "Goal",
+        "columns": [
+          {
+            "name": "SubjectReference",
+            "type": "String",
+            "path": "Goal.subject.reference",
+            "index": false
+          },
+          {
+            "name": "DescriptionText",
+            "type": "String",
+            "path": "Goal.description.text",
+            "index": true
+          },
+          {
+            "name": "LifecycleStatus",
+            "type": "String",
+            "path": "Goal.lifecycleStatus",
+            "index": false
+          }
+        ]
+      }
+    ]
+  }
