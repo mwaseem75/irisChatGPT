@@ -346,25 +346,36 @@ ClassMethod irisFHIRSQL(query) [ Language = python ]
 	
 	#Set namespace to FHIRSERVER in order to retrieve data from FHIR SERVER
 	iris.system.Process.SetNamespace('FHIRSERVER')
+	
 	#Get Patient data and convert to panda dataframe
 	mySql = '''
 		SELECT ID, AddressCity, BirthDate, Gender, IdentifierTypeCodingCode, IdentifierValue, Key, NameFamily, NameGiven, NamePrefix, NameUse
 		FROM FHIR.Patient   
 		'''
-	#Calling embedded python iris.sql.exec class to get result set
-	resultSet = iris.sql.exec(mySql)
-	#Get dataframe by calling resultset dataframe function 
-	patients = resultSet.dataframe()
+	try:
+		#Calling embedded python iris.sql.exec class to get result set
+		resultSet = iris.sql.exec(mySql)
+		patients = resultSet.dataframe()
+	except Exception as e:
+		print(e)
+		iris.system.Process.SetNamespace('USER')
+		return
+			
+
 	#Getting observations
 	mySql = '''
 		SELECT 
 		ID, CodeCodingCode, CodeCodingDisplay, Key, SubjectReference, ValueQuantityCode, ValueQuantityUnit, ValueQuantityValue
 		FROM FHIR.Observation
 		'''
-	#Calling embedded python iris.sql.exec class to get result set
-	resultSet = iris.sql.exec(mySql)
-	#Get dataframe by calling resultset dataframe function 
-	observations = resultSet.dataframe()
+	try:
+		#Calling embedded python iris.sql.exec class to get result set
+		resultSet = iris.sql.exec(mySql)
+		observations = resultSet.dataframe()
+	except Exception as e:
+		print(e)
+		iris.system.Process.SetNamespace('USER')
+		return
 	
 	#Getting AllergyIntolerance
 	mySql = '''
@@ -372,10 +383,15 @@ ClassMethod irisFHIRSQL(query) [ Language = python ]
 		ID, ClinicalStatusCodingCode, CodeCodingCode, CodeCodingDisplay, Key, PatientReference
 		FROM FHIR.AllergyIntolerance
 		'''
-	#Calling embedded python iris.sql.exec class to get result set
-	resultSet = iris.sql.exec(mySql)
-	#Get dataframe by calling resultset dataframe function 
-	allergyIntolerances = resultSet.dataframe()
+	try:
+		#Calling embedded python iris.sql.exec class to get result set
+		resultSet = iris.sql.exec(mySql)
+		allergyIntolerances = resultSet.dataframe()
+	except Exception as e:
+		print(e)
+		iris.system.Process.SetNamespace('USER')
+		return
+
 	
 	#Getting Encounters
 	mySql = '''
@@ -383,10 +399,14 @@ ClassMethod irisFHIRSQL(query) [ Language = python ]
 		ID, Key, ServiceProviderReference, SubjectReference
 		FROM FHIR.Encounter
 		'''
-	#Calling embedded python iris.sql.exec class to get result set
-	resultSet = iris.sql.exec(mySql)
-	#Get dataframe by calling resultset dataframe function 
-	encounters = resultSet.dataframe()
+	try:
+		#Calling embedded python iris.sql.exec class to get result set
+		resultSet = iris.sql.exec(mySql)
+		encounters = resultSet.dataframe()
+	except Exception as e:
+		print(e)
+		iris.system.Process.SetNamespace('USER')
+		return
 	
 	#Getting Goals
 	mySql = '''
@@ -394,10 +414,14 @@ ClassMethod irisFHIRSQL(query) [ Language = python ]
 		ID, DescriptionText, Key, LifecycleStatus, SubjectReference
 		FROM FHIR.Goal
 		'''
-	#Calling embedded python iris.sql.exec class to get result set
-	resultSet = iris.sql.exec(mySql)
-	#Get dataframe by calling resultset dataframe function 
-	goals = resultSet.dataframe()
+	try:
+		#Calling embedded python iris.sql.exec class to get result set
+		resultSet = iris.sql.exec(mySql)
+		goals = resultSet.dataframe()
+	except Exception as e:
+		print(e)
+		iris.system.Process.SetNamespace('USER')
+		return
 	
 	#Getting Organizations
 	mySql = '''
@@ -405,18 +429,26 @@ ClassMethod irisFHIRSQL(query) [ Language = python ]
 		ID, AddressCity, IdentifierValue, Key, Name
 		FROM FHIR.Organization
 		'''
-	#Calling embedded python iris.sql.exec class to get result set
-	resultSet = iris.sql.exec(mySql)
-	#Get dataframe by calling resultset dataframe function 
-	organizations = resultSet.dataframe()
+	try:
+		#Calling embedded python iris.sql.exec class to get result set
+		resultSet = iris.sql.exec(mySql)
+		organizations = resultSet.dataframe()
+	except Exception as e:
+		print(e)
+		iris.system.Process.SetNamespace('USER')
+		return
 	########################################################################        
 	try:
 		agent = create_pandas_dataframe_agent(OpenAI(temperature=0), [patients,observations,allergyIntolerances,encounters,goals,organizations], verbose=True)
+		return '\n'+agent.run(query)+'\n'
 	except Exception as e:
 	    print(e)
-	#Setting namespace back to USER    
-	iris.system.Process.SetNamespace('USER')    
-	return '\n'+agent.run(query)+'\n'
+	    return
+	finally:    
+		#Setting namespace back to USER    
+		iris.system.Process.SetNamespace('USER')
+
+	return
 }
 
 // CHATGpt with FHIR, Patients and Observations
