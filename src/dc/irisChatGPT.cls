@@ -326,11 +326,103 @@ ClassMethod pythonREPL(query) [ Language = python ]
 	return ret
 }
 
+// ChatGPT with Iris SQL FHIR Builder
+
+ClassMethod irisFHIRSQL(query) [ Language = python ]
+{
+	from langchain.agents import create_pandas_dataframe_agent
+	from langchain.llms.openai import OpenAI
+	import os,iris
+	import pandas as pd
+
+	#Get Api key
+	apiKeyRef = iris.gref("^ChatGPTKey")
+	try:
+		apiKey = apiKeyRef.get([1])
+	except:
+	    return "Please define ApiKey by calling SetApiKey(key) method"
+
+	os.environ['OPENAI_API_KEY'] = apiKey
+	
+	#Set namespace to FHIRSERVER in order to retrieve data from FHIR SERVER
+	iris.system.Process.SetNamespace('FHIRSERVER')
+	#Get Patient data and convert to panda dataframe
+	mySql = '''
+		SELECT ID, AddressCity, BirthDate, Gender, IdentifierTypeCodingCode, IdentifierValue, Key, NameFamily, NameGiven, NamePrefix, NameUse
+		FROM FHIR.Patient   
+		'''
+	#Calling embedded python iris.sql.exec class to get result set
+	resultSet = iris.sql.exec(mySql)
+	#Get dataframe by calling resultset dataframe function 
+	patients = resultSet.dataframe()
+	#Getting observations
+	mySql = '''
+		SELECT 
+		ID, CodeCodingCode, CodeCodingDisplay, Key, SubjectReference, ValueQuantityCode, ValueQuantityUnit, ValueQuantityValue
+		FROM FHIR.Observation
+		'''
+	#Calling embedded python iris.sql.exec class to get result set
+	resultSet = iris.sql.exec(mySql)
+	#Get dataframe by calling resultset dataframe function 
+	observations = resultSet.dataframe()
+	
+	#Getting AllergyIntolerance
+	mySql = '''
+		SELECT 
+		ID, ClinicalStatusCodingCode, CodeCodingCode, CodeCodingDisplay, Key, PatientReference
+		FROM FHIR.AllergyIntolerance
+		'''
+	#Calling embedded python iris.sql.exec class to get result set
+	resultSet = iris.sql.exec(mySql)
+	#Get dataframe by calling resultset dataframe function 
+	allergyIntolerances = resultSet.dataframe()
+	
+	#Getting Encounters
+	mySql = '''
+		SELECT 
+		ID, Key, ServiceProviderReference, SubjectReference
+		FROM FHIR.Encounter
+		'''
+	#Calling embedded python iris.sql.exec class to get result set
+	resultSet = iris.sql.exec(mySql)
+	#Get dataframe by calling resultset dataframe function 
+	encounters = resultSet.dataframe()
+	
+	#Getting Goals
+	mySql = '''
+		SELECT 
+		ID, DescriptionText, Key, LifecycleStatus, SubjectReference
+		FROM FHIR.Goal
+		'''
+	#Calling embedded python iris.sql.exec class to get result set
+	resultSet = iris.sql.exec(mySql)
+	#Get dataframe by calling resultset dataframe function 
+	goals = resultSet.dataframe()
+	
+	#Getting Organizations
+	mySql = '''
+		SELECT 
+		ID, AddressCity, IdentifierValue, Key, Name
+		FROM FHIR.Organization
+		'''
+	#Calling embedded python iris.sql.exec class to get result set
+	resultSet = iris.sql.exec(mySql)
+	#Get dataframe by calling resultset dataframe function 
+	organizations = resultSet.dataframe()
+	########################################################################        
+	try:
+		agent = create_pandas_dataframe_agent(OpenAI(temperature=0), [patients,observations,allergyIntolerances,encounters,goals,organizations], verbose=True)
+	except Exception as e:
+	    print(e)
+	#Setting namespace back to USER    
+	iris.system.Process.SetNamespace('USER')    
+	return '\n'+agent.run(query)+'\n'
+}
+
 // CHATGpt with FHIR, Patients and Observations
 
 ClassMethod irisFHIR(query) [ Language = python ]
 {
-	from fhirpy import SyncFHIRClient
 	from langchain.agents import create_pandas_dataframe_agent
 	from langchain.llms.openai import OpenAI
 	from fhirpy import SyncFHIRClient
