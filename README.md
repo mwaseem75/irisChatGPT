@@ -86,6 +86,12 @@ write chat.irisContest("Give me Prizes and nominations")
 
 ## [INTERSYSTEMS FHIR SQL BUILDER](https://docs.intersystems.com/components/csp/docbook/DocBook.UI.Page.cls?KEY=AFSB) BUILDER ChatGPT
 Repository will load FHIR Resources, All you need is to configure FHIR SQL BUILDER.
+For configuration, Navigate to [http://localhost:55037/csp/fhirsql/index.csp](http://localhost:55037/csp/fhirsql/index.csp#)
+![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/2c41bbbd-5e80-4732-8fd1-23b4688fa554)
+For more details about how to do configuration, please watch this [Tutorial Video](https://learning.intersystems.com/course/view.php?name=ProjectingHL7FHIRTables)
+
+To view the specification, Navigate to [http://localhost:55037/csp/fhirsql/index.csp/spec/1](http://localhost:55037/csp/fhirsql/index.csp/spec/1) 
+![image](https://github.com/mwaseem75/irisChatGPT/assets/18219467/2477efef-6a6f-4aa3-86ac-12b1cf5904fe)
 
 Once configured, we can do ChatGPT with FHIR SQL 
 ```
