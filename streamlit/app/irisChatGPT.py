@@ -8,7 +8,9 @@ from langchain.chains.conversation.memory import ConversationEntityMemory
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain,ConversationChain
 from langchain.chains.conversation.prompt import ENTITY_MEMORY_CONVERSATION_TEMPLATE
-from langchain import  SQLDatabase, SQLDatabaseChain
+#from langchain import  SQLDatabase, SQLDatabaseChain
+from langchain.utilities import SQLDatabase
+from langchain_experimental.sql import SQLDatabaseChain
 from langchain.prompts.prompt import PromptTemplate
 import os
 
