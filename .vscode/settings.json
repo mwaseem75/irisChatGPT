@@ -14,8 +14,10 @@
       "internalPort": 52773
     },
     "links": {
-      "irisChatGPT": "http://localhost:55037/csp/irisChatGPT/index.csp",
-      "Streamlit Application": "http://localhost:8501"
+      "irisChatGPT": "http://${host}:${port}/csp/irisChatGPT/index.csp",
+      "Streamlit Application": "http://${host}:8501",
+      "SQL FHIR Builder": "http://${host}:${port}/csp/fhirsql/index.html",
+      "IRIS SQL Portal": "http://${host}:${port}/csp/sys/exp/%25CSP.UI.Portal.SQL.Home.zen?$NAMESPACE=FHIRSERVER"
     },
     "active": true,
     "server": "default~iris"
