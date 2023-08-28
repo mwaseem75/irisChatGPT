@@ -1,34 +1,36 @@
-zn "%SYS"
-Do ##class(Security.Users).UnExpireUserPasswords("*")
+    zn "%SYS"
+    Do ##class(Security.Users).UnExpireUserPasswords("*")
 
-//init FHIR Server
-zn "HSLIB"
-set namespace="FHIRSERVER"
+    //init FHIR Server
+    zn "HSLIB"
+    set namespace="FHIRSERVER"
 
-Set appKey = "/csp/healthshare/fhirserver/fhir/r4"
-Set strategyClass = "HS.FHIRServer.Storage.Json.InteractionsStrategy"
-set metadataPackages = $lb("hl7.fhir.r4.core@4.0.1")
-set importdir="/opt/irisapp/src"
+    Set appKey = "/fhir/r4"
+    Set strategyClass = "HS.FHIRServer.Storage.Json.InteractionsStrategy"
+    set metadataPackages = $lb("hl7.fhir.r4.core@4.0.1")
+    set importdir="/opt/irisapp/src"
 
-//Install a Foundation namespace and change to it
-Do ##class(HS.HC.Util.Installer).InstallFoundation(namespace)
-zn namespace
+    //Install a Foundation namespace and change to it
+    #; Do ##class(HS.HC.Util.Installer).InstallFoundation(namespace)
+    Do ##class(HS.Util.Installer.Foundation).Install(namespace)
 
-// Install elements that are required for a FHIR-enabled namespace
-Do ##class(HS.FHIRServer.Installer).InstallNamespace()
+    zn namespace
 
-// Install an instance of a FHIR Service into the current namespace
-Do ##class(HS.FHIRServer.Installer).InstallInstance(appKey, strategyClass, metadataPackages)
+    // Install elements that are required for a FHIR-enabled namespace
+    Do ##class(HS.FHIRServer.Installer).InstallNamespace()
 
-// Configure FHIR Service instance to accept unauthenticated requests
-set strategy = ##class(HS.FHIRServer.API.InteractionsStrategy).GetStrategyForEndpoint(appKey)
-set config = strategy.GetServiceConfigData()
-set config.DebugMode = 4
-do strategy.SaveServiceConfigData(config)
+    // Install an instance of a FHIR Service into the current namespace
+    Do ##class(HS.FHIRServer.Installer).InstallInstance(appKey, strategyClass, metadataPackages)
 
-zw ##class(HS.FHIRServer.Tools.DataLoader).SubmitResourceFiles("/opt/irisbuild/fhirdata/", "FHIRSERVER", appKey)
+    // Configure FHIR Service instance to accept unauthenticated requests
+    set strategy = ##class(HS.FHIRServer.API.InteractionsStrategy).GetStrategyForEndpoint(appKey)
+    set config = strategy.GetServiceConfigData()
+    set config.DebugMode = 4
+    do strategy.SaveServiceConfigData(config)
 
-zn "USER"
-zpm "load /opt/irisbuild/ -v":1:1
+    zw ##class(HS.FHIRServer.Tools.DataLoader).SubmitResourceFiles("/opt/irisapp/fhirdata/", "FHIRSERVER", appKey)
 
-halt
+    zn "USER"
+    zpm "load /opt/irisapp/ -v":1:1
+
+    halt

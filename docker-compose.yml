@@ -4,6 +4,7 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile
+    hostname: irisChatGPT
     restart: always
     command: --check-caps false
     ports: 
