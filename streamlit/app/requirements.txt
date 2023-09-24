@@ -6,4 +6,5 @@ openai
 tiktoken
 faiss-cpu
 langchain-experimental
+pysqlite3-binary
 
