@@ -14,6 +14,10 @@ from langchain_experimental.sql import SQLDatabaseChain
 from langchain.prompts.prompt import PromptTemplate
 import os
 
+__import__('pysqlite3')
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+
 MODEL = "gpt-3.5-turbo-0613"
 K = 10
 
