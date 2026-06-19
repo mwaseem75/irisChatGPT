@@ -17,7 +17,7 @@
       "irisChatGPT": "http://localhost:55037/csp/irisChatGPT/index.csp",
       "Streamlit Application": "http://localhost:8501"
     },
-    "active": true,
+    "active": false,
     "server": "default~iris"
   },
   "[python]": {

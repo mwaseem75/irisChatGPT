@@ -3,26 +3,38 @@
   <Document name="irisChatGPT.ZPM">
     <Module>
       <Name>irisChatGPT</Name>
-      <Version>1.0.0</Version>
+      <Version>1.0.1</Version>
       <Description>IRIS Chat GPT multi functional application</Description>
       <Packaging>module</Packaging>
-      <SourcesRoot>src</SourcesRoot>
-      <Resource Name="dc.PKG"/>
-      <FileCopy Name="python/" Target="${mgrdir}python/"/>   
-      <FileCopy Name="pdfdata/" Target="${mgrdir}pdfdata/"/>   
+      <Default Name="name" Value="FHIRSERVER" />
+      <Default Name="Webapp" Value="/fhir/r4" />
+      <Default Name="AddTestData" Value="1" />
+      <Default Name="InteractionsStrategy" Value="JsonAdvSql" />      
+    <SourcesRoot>src</SourcesRoot>
+    <Invokes>
+    <Invoke Class="fhirsetup.Setup" Method="SetupFHIRServer" Phase="Activate" When="After" >
+      <Arg>${name}</Arg>
+      <Arg>${Webapp}</Arg>
+      <Arg>${AddTestData}</Arg>
+      <Arg>${InteractionsStrategy}</Arg>
+     </Invoke>
+    </Invokes>
+    <Resource Name="fhirsetup.PKG"/>
+    <Resource Name="dc.PKG"/>
+    <FileCopy Name="python/" Target="${mgrdir}python/"/>   
+    <FileCopy Name="pdfdata/" Target="${mgrdir}pdfdata/"/>   
        
-      <CSPApplication
-        Url="/csp/irisChatGPT"
-        Path="/src/csp"
-        Directory="{$cspdir}/irisChatGPT"
-        ServeFiles="1"
-        Recurse="1"
-        CookiePath="/csp/irisChatGPT/" 
-        UseCookies="2"
-        MatchRoles=":{$dbrole}" 
-        PasswordAuthEnabled="1"
-        UnauthenticatedEnabled="0"
-       />
+     <WebApplication
+       Url="/csp/irisChatGPT"
+       DeployPath="${cspdir}irisChatGPT/"
+       ServeFiles="1"
+       Recurse="1"
+       CookiePath="/csp/irisChatGPT/"
+       UseCookies="2"
+       MatchRoles=":{$globalsDbRole}"
+       PasswordAuthEnabled="1"
+       UnauthenticatedEnabled="0"
+   />
     </Module>
   </Document>
 </Export>

@@ -14,10 +14,10 @@ services:
       - ./:/irisdev/app
 
 
-  streamlit:
-    build:
-      context: .
-      dockerfile : streamlit/Dockerfile 
-    ports:
-    - 8501:8501
+  # streamlit:
+  #   build:
+  #     context: .
+  #     dockerfile : streamlit/Dockerfile 
+  #   ports:
+  #   - 8501:8501
 

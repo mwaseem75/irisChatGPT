@@ -21,13 +21,13 @@ ClassMethod SetFHIRUrl(URL As %String) As %Integer
 
 ClassMethod openAI(query) [ Language = python ]
 {
-	from langchain.chat_models import ChatOpenAI
+	from langchain_openai import ChatOpenAI
 	from langchain.chains.conversation.memory import ConversationEntityMemory
 	from langchain.chains import ConversationChain
 	from langchain.chains.conversation.prompt import ENTITY_MEMORY_CONVERSATION_TEMPLATE
 	import os,iris
 
-	MODEL = "gpt-3.5-turbo-0613"
+	MODEL = "gpt-3.5-turbo"
 	K = 10
 	#Get Api key
 	apiKeyRef = iris.gref("^ChatGPTKey")
@@ -55,9 +55,10 @@ ClassMethod openAI(query) [ Language = python ]
 
 ClassMethod irisDB(query) [ Language = python ]
 {
-	from langchain.llms import OpenAI
-	from langchain import  SQLDatabase, SQLDatabaseChain
-	from langchain.prompts.prompt import PromptTemplate
+	from langchain_community.llms import OpenAI
+	from langchain_community.utilities import SQLDatabase
+	from langchain_experimental.sql import SQLDatabaseChain
+	from langchain.prompts import PromptTemplate
 	import os,iris
 	
 	#Get Api key
@@ -89,7 +90,7 @@ ClassMethod irisDB(query) [ Language = python ]
 
 	llm = OpenAI(temperature=0, verbose=True)
 
-	db_chain = SQLDatabaseChain(llm=llm, database=db, prompt=PROMPT, verbose=True) 
+	db_chain = SQLDatabaseChain.from_llm(llm=llm,db=db,prompt=PROMPT,verbose=True)
 
 	return db_chain.run(query)
 }
@@ -98,10 +99,10 @@ ClassMethod irisDB(query) [ Language = python ]
 
 ClassMethod ingest(filePath) [ Language = python ]
 {
-	from langchain.vectorstores import Chroma
-	from langchain.embeddings import OpenAIEmbeddings
+	from langchain_community.vectorstores import Chroma
+	from langchain_openai import OpenAIEmbeddings
 	from langchain.text_splitter import RecursiveCharacterTextSplitter
-	from langchain.document_loaders import PyPDFLoader,UnstructuredWordDocumentLoader,TextLoader
+	from langchain_community.document_loaders import PyPDFLoader,TextLoader
 	
 	import os,iris
 	#Get Api key
@@ -119,7 +120,7 @@ ClassMethod ingest(filePath) [ Language = python ]
 	if file_extension == '.pdf':
 	    loader = PyPDFLoader(filePath)       
 	elif file_extension == '.docx' or file_extension=='.doc':
-	    loader = UnstructuredWordDocumentLoader(filePath)
+	    return "DOC/DOCX files are not supported"
 	elif file_extension == '.txt':
 	    loader = TextLoader(filePath)    
 	else:
@@ -135,7 +136,7 @@ ClassMethod ingest(filePath) [ Language = python ]
 		persist_directory = iris.cls("%SYSTEM.Util").ManagerDirectory()+'python/vectordb/personal'
 		vectordb = Chroma.from_documents(documents=texts, embedding=embedding, persist_directory=persist_directory)
 		#save document locally
-		vectordb.persist()
+		#vectordb.persist()
 		vectordb = None
 	except Exception as e:
 		print(e)
@@ -147,9 +148,9 @@ ClassMethod ingest(filePath) [ Language = python ]
 
 ClassMethod irisDocs(query) [ Language = python ]
 {
-	from langchain.vectorstores import Chroma
-	from langchain.embeddings import OpenAIEmbeddings
-	from langchain.llms import OpenAI
+	from langchain_community.vectorstores import Chroma
+	from langchain_openai import OpenAIEmbeddings
+	from langchain_community.llms import OpenAI
 	from langchain.memory import ConversationBufferMemory
 	from langchain.chains import ConversationalRetrievalChain
 	import iris
@@ -171,7 +172,7 @@ ClassMethod irisDocs(query) [ Language = python ]
 		memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 		#The ConversationalRetrievalChain is a conversational AI model that is designed to retrieve relevant responses based on user queries
 		qa = ConversationalRetrievalChain.from_llm(OpenAI(temperature=0), vectordb.as_retriever(), memory=memory)
-		ret = '\n'+qa.run(query)+'\n'
+		ret = '\n' + qa.invoke({"question": query})["answer"] + '\n'
 	except Exception as e:
 		print(e)
 	return ret
@@ -181,9 +182,9 @@ ClassMethod irisDocs(query) [ Language = python ]
 
 ClassMethod irisContest(query) [ Language = python ]
 {
-	from langchain.vectorstores import Chroma
-	from langchain.embeddings import OpenAIEmbeddings
-	from langchain.llms import OpenAI
+	from langchain_community.vectorstores import Chroma
+	from langchain_openai import OpenAIEmbeddings
+	from langchain_community.llms import OpenAI
 	from langchain.memory import ConversationBufferMemory
 	from langchain.chains import ConversationalRetrievalChain
 
@@ -204,7 +205,7 @@ ClassMethod irisContest(query) [ Language = python ]
 		vectordb = Chroma(persist_directory=persist_directory, embedding_function=embedding)
 		memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 		qa = ConversationalRetrievalChain.from_llm(OpenAI(temperature=0), vectordb.as_retriever(), memory=memory)
-		ret = '\n'+qa.run(query)+'\n'
+		ret = '\n' + qa.invoke(query)["response"] + '\n'
 	except Exception as e:
 		print(e)
 	return ret
@@ -214,9 +215,9 @@ ClassMethod irisContest(query) [ Language = python ]
 
 ClassMethod personalGPT(query) [ Language = python ]
 {
-	from langchain.vectorstores import Chroma
-	from langchain.embeddings import OpenAIEmbeddings
-	from langchain.llms import OpenAI
+	from langchain_community.vectorstores import Chroma
+	from langchain_openai import OpenAIEmbeddings
+	from langchain_community.llms import OpenAI
 	from langchain.memory import ConversationBufferMemory
 	from langchain.chains import ConversationalRetrievalChain
 
@@ -238,7 +239,7 @@ ClassMethod personalGPT(query) [ Language = python ]
 		memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 		#The ConversationalRetrievalChain is a conversational AI model that is designed to retrieve relevant responses based on user queries
 		qa = ConversationalRetrievalChain.from_llm(OpenAI(temperature=0), vectordb.as_retriever(), memory=memory)
-		ret = '\n'+qa.run(query)+'\n'
+		ret = '\n' + qa.invoke(query)["response"] + '\n'
 	except Exception as e:
 		print(e)
 	return ret
@@ -248,7 +249,7 @@ ClassMethod personalGPT(query) [ Language = python ]
 
 ClassMethod wikiPedia(query) [ Language = python ]
 {
-	from langchain.utilities import WikipediaAPIWrapper
+	from langchain_community.utilities import WikipediaAPIWrapper
 	import os,iris
 	
 	#Get Api key
@@ -273,7 +274,7 @@ ClassMethod wikiPedia(query) [ Language = python ]
 
 ClassMethod duckDuckGo(query) [ Language = python ]
 {
-	from langchain.tools import DuckDuckGoSearchRun
+	from langchain_community.tools import DuckDuckGoSearchRun
 	import os,iris
 	
 	#Get Api key
@@ -298,9 +299,9 @@ ClassMethod duckDuckGo(query) [ Language = python ]
 
 ClassMethod pythonREPL(query) [ Language = python ]
 {
-	from langchain.agents.agent_toolkits import create_python_agent
-	from langchain.tools.python.tool import PythonREPLTool
-	from langchain.llms.openai import OpenAI
+	from langchain_experimental.agents import create_python_agent
+	from langchain_experimental.tools import PythonREPLTool
+	from langchain_community.llms import OpenAI
 	import os,iris
 	
 	#Get Api key
@@ -330,8 +331,8 @@ ClassMethod pythonREPL(query) [ Language = python ]
 
 ClassMethod irisFHIRSQL(query) [ Language = python ]
 {
-	from langchain.agents import create_pandas_dataframe_agent
-	from langchain.llms.openai import OpenAI
+	from langchain_experimental.agents import create_pandas_dataframe_agent
+	from langchain_community.llms import OpenAI
 	import os,iris
 	import pandas as pd
 
@@ -456,7 +457,7 @@ ClassMethod irisFHIRSQL(query) [ Language = python ]
 ClassMethod irisFHIR(query) [ Language = python ]
 {
 	from langchain.agents import create_pandas_dataframe_agent
-	from langchain.llms.openai import OpenAI
+	from langchain_community.llms import OpenAI
 	from fhirpy import SyncFHIRClient
 	import os,iris
 	import pandas as pd

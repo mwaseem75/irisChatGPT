@@ -1,178 +1,276 @@
-from langchain.vectorstores import Chroma
-from langchain.embeddings import OpenAIEmbeddings
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.llms import OpenAI
-from langchain.chat_models import ChatOpenAI
-from langchain.document_loaders import PyPDFLoader,UnstructuredWordDocumentLoader,TextLoader,UnstructuredURLLoader
-from langchain.chains.conversation.memory import ConversationEntityMemory
-from langchain.memory import ConversationBufferMemory
-from langchain.chains import ConversationalRetrievalChain,ConversationChain
-from langchain.chains.conversation.prompt import ENTITY_MEMORY_CONVERSATION_TEMPLATE
-#from langchain import  SQLDatabase, SQLDatabaseChain
-from langchain.utilities import SQLDatabase
-from langchain_experimental.sql import SQLDatabaseChain
-from langchain.prompts.prompt import PromptTemplate
-import os
-
+# Must be first — before any other imports
 __import__('pysqlite3')
 import sys
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
-MODEL = "gpt-3.5-turbo-0613"
+import os
+
+from langchain_openai import OpenAIEmbeddings, OpenAI, ChatOpenAI
+from langchain_community.vectorstores import Chroma
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+
+from langchain_community.document_loaders import (
+    PyPDFLoader,
+    UnstructuredWordDocumentLoader,
+    TextLoader,
+)
+
+from langchain.memory import (
+    ConversationEntityMemory,
+    ConversationBufferMemory,
+)
+
+from langchain.chains.conversation.prompt import (
+    ENTITY_MEMORY_CONVERSATION_TEMPLATE,
+)
+
+from langchain.chains import (
+    ConversationChain,
+    ConversationalRetrievalChain,
+)
+
+from langchain_community.utilities import SQLDatabase
+from langchain_experimental.sql import SQLDatabaseChain
+
+from langchain.prompts import PromptTemplate
+
+MODEL = "gpt-3.5-turbo"
 K = 10
 
-# def websurf():
-#     urls = ['https://community.intersystems.com/']
-    
-#     loaders = UnstructuredURLLoader(urls=urls)
-#     data = loaders.load()
-#     print(data)
 
+def irisdb(query, apiKey):
+    os.environ["OPENAI_API_KEY"] = apiKey
 
-#connect to iris db 
-def irisdb(query,apiKey):
+    _DEFAULT_TEMPLATE = """
+Given an input question, first create a syntactically correct {dialect} query to run, then look at the results of the query and return the answer.
 
-    os.environ['OPENAI_API_KEY'] = apiKey
-    
-    _DEFAULT_TEMPLATE = """Given an input question, first create a syntactically correct {dialect} query to run, then look at the results of the query and return the answer.
+Use the following format:
 
-    Use the following format:
+Question: "Question here"
+SQLQuery: "SQL Query to run"
+SQLResult: "Result of the SQLQuery"
+Answer: "Final answer here"
 
-    Question: "Question here"
-    SQLQuery: "SQL Query to run"
-    SQLResult: "Result of the SQLQuery"
-    Answer: "Final answer here"
-
-    The SQL query should NOT end with semi-colon
-    Question: {input}"""
+The SQL query should NOT end with semi-colon
+Question: {input}
+"""
 
     PROMPT = PromptTemplate(
-        input_variables=["input", "dialect"], template=_DEFAULT_TEMPLATE
+        input_variables=["input", "dialect"],
+        template=_DEFAULT_TEMPLATE,
     )
 
-    db = SQLDatabase.from_uri("iris://superuser:SYS@localhost:1972/USER") 
+    db = SQLDatabase.from_uri(
+        "iris://superuser:SYS@localhost:1972/USER"
+    )
 
-    llm = OpenAI(temperature=0, verbose=True)
+    llm = OpenAI(
+        temperature=0,
+        verbose=True,
+    )
 
-    db_chain = SQLDatabaseChain(llm=llm, database=db, prompt=PROMPT, verbose=True) 
+    db_chain = SQLDatabaseChain.from_llm(
+        llm=llm,
+        db=db,
+        prompt=PROMPT,
+        verbose=True,
+    )
 
-    db_chain.run(query)
+    return db_chain.invoke(query)["result"]
 
-#Save document locally. by default use personal model name 
-def ingest(path,apiKey,persist_directory = 'personal'):
-    
-    os.environ['OPENAI_API_KEY'] = apiKey
+
+def ingest(path, apiKey, persist_directory="personal"):
+    os.environ["OPENAI_API_KEY"] = apiKey
+
     embedding = OpenAIEmbeddings()
 
     fileType = getFileType(path)
-    if fileType == "UNKOWN":
-        return "Please provide PDF,DOC or TXT file to ingest"
+
+    if fileType == "UNKNOWN":
+        return "Please provide PDF, DOC or TXT file to ingest"
+
     elif fileType == "PDF":
-        loader = PyPDFLoader(path)       
+        loader = PyPDFLoader(path)
+
     elif fileType == "DOC":
-         ## Load and process the text
         loader = UnstructuredWordDocumentLoader(path)
+
     elif fileType == "TXT":
-        loader = TextLoader(path)    
-     
+        loader = TextLoader(path)
+
     try:
         documents = loader.load()
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
+
+        text_splitter = RecursiveCharacterTextSplitter(
+            chunk_size=1000,
+            chunk_overlap=0,
+        )
+
         texts = text_splitter.split_documents(documents)
-        # Embed and store the texts
-        # Supplying a persist_directory will store the embeddings on disk
-        vectordb = Chroma.from_documents(documents=texts, embedding=embedding, persist_directory=persist_directory)
-        #save document locally
-        vectordb.persist()
-        vectordb = None
+
+        Chroma.from_documents(
+            documents=texts,
+            embedding=embedding,
+            persist_directory=persist_directory,
+        )
+
+        return "File uploaded successfully"
+
     except Exception as e:
-        return e
+        return str(e)
 
-    return "File uploaded successfully"
 
-#function used in streamlit application
 def docLoader(apiKey):
-    ## Now we can load the persisted database from disk, and use it as normal. 
-    os.environ['OPENAI_API_KEY'] = apiKey
-    embedding = OpenAIEmbeddings()
-    vectordb = Chroma(persist_directory='/opt/irisappS/streamlit/app/vectors', embedding_function=embedding)
-    return vectordb
+    os.environ["OPENAI_API_KEY"] = apiKey
 
-#function used in streamlit application
+    embedding = OpenAIEmbeddings()
+
+    return Chroma(
+        persist_directory="vectors",
+        embedding_function=embedding,
+    )
+
+
 def contestLoader(apiKey):
-    os.environ['OPENAI_API_KEY'] = apiKey
-    embedding = OpenAIEmbeddings()
-    ## Now we can load the persisted database from disk, and use it as normal. 
-    vectordb = Chroma(persist_directory='/opt/irisappS/streamlit/app/contest', embedding_function=embedding)
-    return vectordb
- 
-def irisdocs(query,apiKey):
-    os.environ['OPENAI_API_KEY'] = apiKey
-    embedding = OpenAIEmbeddings()
-    persist_directory = 'vectors'
-    ## Now we can load the persisted database from disk, and use it as normal. 
-    try:
-        vectordb = Chroma(persist_directory=persist_directory, embedding_function=embedding)
-        memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
-        qa = ConversationalRetrievalChain.from_llm(OpenAI(temperature=0), vectordb.as_retriever(), memory=memory)
-    except Exception as e:
-        return e
-    return qa.run(query)
+    os.environ["OPENAI_API_KEY"] = apiKey
 
-def iriscontest(query,apiKey):
-    os.environ['OPENAI_API_KEY'] = apiKey
     embedding = OpenAIEmbeddings()
-    persist_directory = 'contest'
-    ## Now we can load the persisted database from disk, and use it as normal. 
-    try:
-        vectordb = Chroma(persist_directory=persist_directory, embedding_function=embedding)
-        memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
-        qa = ConversationalRetrievalChain.from_llm(OpenAI(temperature=0), vectordb.as_retriever(), memory=memory)
-    except Exception as e:
-        return e
-    return qa.run(query)
-#personal chatgpt
-def irislocal(query,apiKey,persist_directory = 'personal'):    
-    os.environ['OPENAI_API_KEY'] = apiKey
-    embedding = OpenAIEmbeddings()
-    ## Now we can load the persisted database from disk, and use it as normal. 
-    try:
-        vectordb = Chroma(persist_directory=persist_directory, embedding_function=embedding)
-        memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
-        qa = ConversationalRetrievalChain.from_llm(OpenAI(temperature=0), vectordb.as_retriever(), memory=memory)
-    except Exception as e:
-        return e
-    return qa.run(query)
 
-#use OpenAI 
-def irisOpenAI(query,apiKey):
-    os.environ['OPENAI_API_KEY'] = apiKey
-    embedding = OpenAIEmbeddings()
-    try:
-        llm = ChatOpenAI(temperature=0,openai_api_key=apiKey, model_name=MODEL, verbose=False) 
-        entity_memory = ConversationEntityMemory(llm=llm, k=K )
-        qa = ConversationChain(llm=llm,   prompt=ENTITY_MEMORY_CONVERSATION_TEMPLATE, memory=entity_memory)
-    except Exception as e:  
-        return e
-    
-    return qa.run(query)
-  
+    return Chroma(
+        persist_directory="contest",
+        embedding_function=embedding,
+    )
 
-#Get file type
+
+def irisdocs(query, apiKey):
+    os.environ["OPENAI_API_KEY"] = apiKey
+
+    embedding = OpenAIEmbeddings()
+
+    try:
+        vectordb = Chroma(
+            persist_directory="vectors",
+            embedding_function=embedding,
+        )
+
+        memory = ConversationBufferMemory(
+            memory_key="chat_history",
+            return_messages=True,
+        )
+
+        qa = ConversationalRetrievalChain.from_llm(
+            OpenAI(temperature=0),
+            vectordb.as_retriever(),
+            memory=memory,
+        )
+
+        return qa.invoke({"question": query})["answer"]
+
+    except Exception as e:
+        return str(e)
+
+
+def iriscontest(query, apiKey):
+    os.environ["OPENAI_API_KEY"] = apiKey
+
+    embedding = OpenAIEmbeddings()
+
+    try:
+        vectordb = Chroma(
+            persist_directory="contest",
+            embedding_function=embedding,
+        )
+
+        memory = ConversationBufferMemory(
+            memory_key="chat_history",
+            return_messages=True,
+        )
+
+        qa = ConversationalRetrievalChain.from_llm(
+            OpenAI(temperature=0),
+            vectordb.as_retriever(),
+            memory=memory,
+        )
+
+        return qa.invoke({"question": query})["answer"]
+
+    except Exception as e:
+        return str(e)
+
+
+def irislocal(query, apiKey, persist_directory="personal"):
+    os.environ["OPENAI_API_KEY"] = apiKey
+
+    embedding = OpenAIEmbeddings()
+
+    try:
+        vectordb = Chroma(
+            persist_directory=persist_directory,
+            embedding_function=embedding,
+        )
+
+        memory = ConversationBufferMemory(
+            memory_key="chat_history",
+            return_messages=True,
+        )
+
+        qa = ConversationalRetrievalChain.from_llm(
+            OpenAI(temperature=0),
+            vectordb.as_retriever(),
+            memory=memory,
+        )
+
+        return qa.invoke({"question": query})["answer"]
+
+    except Exception as e:
+        return str(e)
+
+
+def irisOpenAI(query, apiKey):
+    os.environ["OPENAI_API_KEY"] = apiKey
+
+    try:
+        llm = ChatOpenAI(
+            temperature=0,
+            model_name=MODEL,
+            openai_api_key=apiKey,
+            verbose=False,
+        )
+
+        entity_memory = ConversationEntityMemory(
+            llm=llm,
+            k=K,
+        )
+
+        qa = ConversationChain(
+            llm=llm,
+            prompt=ENTITY_MEMORY_CONVERSATION_TEMPLATE,
+            memory=entity_memory,
+        )
+
+        return qa.invoke(query)["response"]
+
+    except Exception as e:
+        return str(e)
+
+
 def getFileType(filePath):
-    filename, file_extension = os.path.splitext(filePath)
-    if file_extension == '.pdf':
-        return "PDF"
-    elif file_extension == '.docx' or file_extension=='.doc':
-        return "DOC"
-    elif file_extension == '.txt':
-        return "TXT"
-    else:
-        return "UNKOWN"
+    _, file_extension = os.path.splitext(filePath)
 
-#save pdf and text files locally to be used to chatGPT locally 
+    if file_extension == ".pdf":
+        return "PDF"
+
+    elif file_extension in (".docx", ".doc"):
+        return "DOC"
+
+    elif file_extension == ".txt":
+        return "TXT"
+
+    return "UNKNOWN"
+
+
 def initdata():
-     #print(ingest('data\RCOS.pdf','vectors'))
-     #print(ingest('data\current_contest.docx','contest'))
     pass
 
+
+print("Test")
